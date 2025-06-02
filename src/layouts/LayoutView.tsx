@@ -10,6 +10,9 @@ export default function LayoutView() {
     { label: "Dataset", href: "/datasets" },
     { label: "Sektoral", href: "#" },
     { label: "Urusan", href: "#" },
+    { label: "Organisasi", href: "#" },
+    { label: "Publikasi", href: "#" },
+    { label: "Kontak", href: "#" }
   ];
 
   const toggleMenu = () => {
@@ -18,9 +21,9 @@ export default function LayoutView() {
 
   return (
     <div>
-      <nav className="bg-white shadow-md">
-        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-          <div className="relative flex items-center justify-between h-16">
+      <nav >
+        <div className="max-w-7xl mx-auto px-2 sm:px-16 lg:px-20">
+          <div className="relative flex items-center justify-between h-24">
             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
               <button
                 onClick={toggleMenu}
@@ -54,7 +57,7 @@ export default function LayoutView() {
                   alt="Workflow"
                 />
                 <img
-                  className="hidden lg:block h-8 w-auto"
+                  className="hidden lg:block h-16 w-auto"
                   src={Icon}
                   alt="Workflow"
                 />
@@ -90,7 +93,9 @@ export default function LayoutView() {
           </div>
         </div>
       </nav>
-      <Outlet />
+      <div className="mx-auto px-2 sm:px-16 lg:px-20">
+        <Outlet />
+      </div>
     </div>
   );
 }
