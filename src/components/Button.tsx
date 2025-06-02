@@ -29,20 +29,17 @@ export default function Button({
   onClick,
   className = '',
 }: ButtonProps) {
-  // Base classes that apply to all buttons
   const baseClasses = 'rounded-md flex items-center justify-center transition-all duration-200 font-medium';
   
-  // Size classes
   const sizeClasses = {
     small: 'px-3 py-1 text-sm',
     medium: 'px-6 py-2',
     large: 'px-8 py-3 text-lg',
   };
   
-  // Color classes for different variants
   const colorClasses = {
     contained: {
-      primary: 'bg-blue-600 hover:bg-blue-700 text-white',
+      primary: 'bg-orange-500 hover:bg-orange-700 text-white',
       secondary: 'bg-gray-600 hover:bg-gray-700 text-white',
       success: 'bg-green-600 hover:bg-green-700 text-white',
       danger: 'bg-red-600 hover:bg-red-700 text-white',
@@ -50,7 +47,7 @@ export default function Button({
       info: 'bg-cyan-500 hover:bg-cyan-600 text-white',
     },
     outlined: {
-      primary: 'border border-blue-600 text-blue-600 hover:bg-blue-50',
+      primary: 'border border-orange-600 text-orange-600 hover:bg-orange-50',
       secondary: 'border border-gray-600 text-gray-600 hover:bg-gray-50',
       success: 'border border-green-600 text-green-600 hover:bg-green-50',
       danger: 'border border-red-600 text-red-600 hover:bg-red-50',
@@ -58,7 +55,7 @@ export default function Button({
       info: 'border border-cyan-500 text-cyan-500 hover:bg-cyan-50',
     },
     text: {
-      primary: 'text-blue-600 hover:bg-blue-50',
+      primary: 'text-orange-600 hover:bg-orange-50',
       secondary: 'text-gray-600 hover:bg-gray-50',
       success: 'text-green-600 hover:bg-green-50',
       danger: 'text-red-600 hover:bg-red-50',
@@ -67,13 +64,10 @@ export default function Button({
     },
   };
   
-  // Disabled classes
   const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer';
   
-  // Width classes
   const widthClasses = fullWidth ? 'w-full' : '';
   
-  // Combine all classes
   const buttonClasses = [
     baseClasses,
     sizeClasses[size],

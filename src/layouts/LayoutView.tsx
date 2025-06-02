@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import Icon from "../assets/icon.png";
+import Button from "../components/Button";
 
 export default function LayoutView() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -63,12 +64,12 @@ export default function LayoutView() {
                 />
               </div>
               <div className="hidden sm:block sm:ml-6">
-                <div className="flex space-x-4">
+                <div className="flex space-x-4 mt-4">
                   {menuItems.map((menu) => (
                     <a
                       key={menu.label}
                       href={menu.href}
-                      className="text-gray-500 hover:text-black px-3 py-2  text-md font-medium"
+                      className="text-gray-500 hover:text-black px-2 text-sm font-bold"
                     >
                       {menu.label}
                     </a>
@@ -76,20 +77,23 @@ export default function LayoutView() {
                 </div>
               </div>
             </div>
+            <Button className="hidden lg:block">Login</Button>
           </div>
         </div>
 
         <div className={isMenuOpen ? "block" : "hidden"} id="mobile-menu">
-          <div className="px-2 pt-2 pb-3 space-y-1">
+          <div className="px-2 pt-2 pb-3 space-y-1 items-center border-t-1 ">
             {menuItems.map((menu) => (
               <a
                 key={menu.label}
                 href={menu.href}
-                className="text-gray-900 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                className="text-gray-500 hover:bg-gray-700 hover:text-white block px-3 py-2 text-base font-medium"
               >
                 {menu.label}
               </a>
             ))}
+                      <Button>Login</Button>
+
           </div>
         </div>
       </nav>
