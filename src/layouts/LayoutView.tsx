@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import Icon from "../assets/icon.png";
+import Button from "../components/Button";
 
 export default function LayoutView() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,6 +11,9 @@ export default function LayoutView() {
     { label: "Dataset", href: "/datasets" },
     { label: "Sektoral", href: "#" },
     { label: "Urusan", href: "#" },
+    { label: "Organisasi", href: "#" },
+    { label: "Publikasi", href: "#" },
+    { label: "Kontak", href: "#" }
   ];
 
   const toggleMenu = () => {
@@ -18,9 +22,9 @@ export default function LayoutView() {
 
   return (
     <div>
-      <nav className="bg-white shadow-md">
-        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-          <div className="relative flex items-center justify-between h-16">
+      <nav >
+        <div className="max-w-7xl mx-auto px-2 sm:px-16 lg:px-20">
+          <div className="relative flex items-center justify-between h-24">
             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
               <button
                 onClick={toggleMenu}
@@ -54,18 +58,18 @@ export default function LayoutView() {
                   alt="Workflow"
                 />
                 <img
-                  className="hidden lg:block h-8 w-auto"
+                  className="hidden lg:block h-16 w-auto"
                   src={Icon}
                   alt="Workflow"
                 />
               </div>
               <div className="hidden sm:block sm:ml-6">
-                <div className="flex space-x-4">
+                <div className="flex space-x-4 mt-4">
                   {menuItems.map((menu) => (
                     <a
                       key={menu.label}
                       href={menu.href}
-                      className="text-gray-500 hover:text-black px-3 py-2  text-md font-medium"
+                      className="text-gray-500 hover:text-black px-2 text-sm font-bold"
                     >
                       {menu.label}
                     </a>
@@ -73,24 +77,29 @@ export default function LayoutView() {
                 </div>
               </div>
             </div>
+            <Button className="hidden lg:block">Login</Button>
           </div>
         </div>
 
         <div className={isMenuOpen ? "block" : "hidden"} id="mobile-menu">
-          <div className="px-2 pt-2 pb-3 space-y-1">
+          <div className="px-2 pt-2 pb-3 space-y-1 items-center border-t-1 ">
             {menuItems.map((menu) => (
               <a
                 key={menu.label}
                 href={menu.href}
-                className="text-gray-900 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                className="text-gray-500 hover:bg-gray-700 hover:text-white block px-3 py-2 text-base font-medium"
               >
                 {menu.label}
               </a>
             ))}
+                      <Button>Login</Button>
+
           </div>
         </div>
       </nav>
-      <Outlet />
+      <div className="mx-auto px-2 sm:px-16 lg:px-20">
+        <Outlet />
+      </div>
     </div>
   );
 }
