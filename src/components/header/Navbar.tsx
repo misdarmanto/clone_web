@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Icon from "../../assets/icon.png";
 import Button from "../buttons/Button";
+import { useNavigate } from "react-router-dom";
 
 type MenuItem = {
   label: string;
@@ -12,8 +13,14 @@ interface NavbarProps {
 }
 
 export default function Navbar({ menuItems = [] }: NavbarProps) {
+  const navigate = useNavigate();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  const handleLogin = () => {
+    navigate("/login");
+  };
 
   return (
     <nav>
@@ -79,7 +86,7 @@ export default function Navbar({ menuItems = [] }: NavbarProps) {
 
           {/* Login button (desktop) */}
           <div className="hidden lg:block">
-            <Button>Login</Button>
+            <Button onClick={handleLogin}>Login</Button>
           </div>
         </div>
       </div>
@@ -97,7 +104,7 @@ export default function Navbar({ menuItems = [] }: NavbarProps) {
             </a>
           ))}
           <div>
-            <Button>Login</Button>
+            <Button onClick={handleLogin}>Login</Button>
           </div>
         </div>
       </div>

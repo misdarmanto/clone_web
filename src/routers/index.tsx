@@ -8,6 +8,7 @@ import UrusanView from "../pages/UrusanView";
 import OrganizationView from "../pages/OrganizationView";
 import PublicationView from "../pages/PublicationView";
 import ContactView from "../pages/ContactView";
+import LoginView from "../pages/LoginView";
 
 export default function AppRouters() {
   const routers = createBrowserRouter([
@@ -45,6 +46,10 @@ export default function AppRouters() {
           element: <ContactView />,
         },
       ],
+    },
+    {
+      path: "/login",
+      element: <LoginView />,
     },
   ]);
 

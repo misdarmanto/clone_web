@@ -1,7 +1,7 @@
 import heroImage from "../assets/hero.png";
 import cardImage from "../assets/card-image.png";
 import whyMeImage from "../assets/whyme.png";
-import Button from "../components/Button";
+import Button from "../components/buttons/Button";
 
 export default function HomeView() {
   return (
@@ -127,8 +127,6 @@ export default function HomeView() {
           />
         </div>
       </div>
-
-    
     </div>
   );
 }
