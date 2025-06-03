@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Icon from "../../assets/icon.png";
 import Button from "../buttons/Button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type MenuItem = {
   label: string;
@@ -72,13 +72,13 @@ export default function Navbar({ menuItems = [] }: NavbarProps) {
             <div className="hidden sm:block sm:ml-6">
               <div className="flex space-x-4 mt-4">
                 {menuItems.map((menu) => (
-                  <a
+                  <Link
                     key={menu.label}
-                    href={menu.href}
-                    className="text-gray-500 hover:text-black px-2 text-sm font-bold"
+                    to={menu.href}
+                    className="text-gray-400 hover:text-gray-700 px-3 py-2 font-bold"
                   >
                     {menu.label}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -95,13 +95,13 @@ export default function Navbar({ menuItems = [] }: NavbarProps) {
       <div className={isMenuOpen ? "block" : "hidden"} id="mobile-menu">
         <div className="px-2 pt-2 pb-3 space-y-1 border-t">
           {menuItems.map((menu) => (
-            <a
+            <Link
               key={menu.label}
-              href={menu.href}
-              className="text-gray-500 hover:bg-gray-700 hover:text-white block px-3 py-2 text-base font-medium"
+              to={menu.href}
+              className="text-gray-400 hover:text-gray-700 px-3 py-2 font-bold"
             >
               {menu.label}
-            </a>
+            </Link>
           ))}
           <div>
             <Button onClick={handleLogin}>Login</Button>
