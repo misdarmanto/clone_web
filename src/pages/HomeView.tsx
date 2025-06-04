@@ -32,6 +32,7 @@ export default function HomeView() {
             src={heroImage}
             alt="Data Portal Illustration"
             className="w-full h-auto"
+            loading="lazy"
           />
         </div>
       </div>
@@ -59,7 +60,7 @@ export default function HomeView() {
             className="bg-white shadow-sm p-8 flex flex-col justify-between"
           >
             <div className="flex justify-center mb-4 rounded-xl">
-              <img src={cardImage} alt="card image" />
+              <img src={cardImage} alt="card image" loading="lazy" />
             </div>
             <h3 className="text-lg font-semibold text-gray-800 mb-2">
               {item.title}
@@ -95,6 +96,7 @@ export default function HomeView() {
             src={whyMeImage}
             alt="Mengapa Satu Data"
             className="w-full max-w-md md:max-w-lg h-auto"
+            loading="lazy"
           />
         </div>
       </div>

@@ -60,11 +60,13 @@ export default function Navbar({ menuItems = [] }: NavbarProps) {
                 className="block lg:hidden h-16 w-auto"
                 src={Icon}
                 alt="Logo"
+                loading="lazy"
               />
               <img
                 className="hidden lg:block h-16 w-auto"
                 src={Icon}
                 alt="Logo"
+                loading="lazy"
               />
             </div>
 
