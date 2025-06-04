@@ -2,12 +2,13 @@ import heroImage from "../assets/hero.webp";
 import cardImage from "../assets/card-image.webp";
 import whyMeImage from "../assets/whyme.webp";
 import Button from "../components/buttons/Button";
+import Card from "../components/card/Card";
 
 export default function HomeView() {
   return (
-    <div className="relative min-h-screen bg-gray-100 overflow-hidden">
+    <div>
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto px-4 py-8 md:py-12">
-        <div className="w-full md:w-1/2 mb-10 md:mb-0">
+        <div className="w-full md:w-1/2 mb-10 md:mb-0 order-2 md:order-1 flex flex-col items-center text-center md:items-start md:text-left">
           <p className="text-gray-400 text-h6 mb-1 font-bold">
             PORTAL SATU DATA LAMPUNG TIMUR
           </p>
@@ -27,7 +28,7 @@ export default function HomeView() {
           </div>
         </div>
 
-        <div className="w-full md:w-1/2">
+        <div className="w-full md:w-1/2 order-1 md:order-2 mb-8 md:mb-0">
           <img
             src={heroImage}
             alt="Data Portal Illustration"
@@ -55,26 +56,36 @@ export default function HomeView() {
             count: 50,
           },
         ].map((item, index) => (
-          <div
+          <Card
             key={index}
-            className="bg-white shadow-sm p-8 flex flex-col justify-between"
-          >
-            <div className="flex justify-center mb-4 rounded-xl">
-              <img src={cardImage} alt="card image" loading="lazy" />
-            </div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">
-              {item.title}
-            </h3>
-            <p className="text-sm text-gray-600 mb-4">{item.desc}</p>
-            <div className="flex justify-between items-center">
-              <span className="text-xl font-bold">
-                {item.count.toLocaleString()}
-              </span>
-              <button className="text-sm font-semibold text-white bg-black rounded px-4 py-2 hover:bg-gray-800 transition">
-                Lihat Data →
-              </button>
-            </div>
-          </div>
+            header={
+              <div>
+                <div className="flex justify-center mb-4 rounded-xl">
+                  <img src={cardImage} alt="card image" loading="lazy" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                  {item.title}
+                </h3>
+              </div>
+            }
+            body={<p className="text-sm text-gray-600 mb-4">{item.desc}</p>}
+            footer={
+              <div className="flex justify-between items-center">
+                <span className="text-xl font-bold">
+                  {item.count.toLocaleString()}
+                </span>
+                <button className="text-sm font-semibold text-white bg-black rounded px-4 py-2 hover:bg-gray-800 transition">
+                  Lihat Data →
+                </button>
+              </div>
+            }
+          />
+          // <div
+          //   className="bg-white shadow-sm p-8 flex flex-col justify-between"
+          // >
+
+          //
+          // </div>
         ))}
       </div>
 
