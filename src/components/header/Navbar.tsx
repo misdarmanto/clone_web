@@ -23,7 +23,7 @@ export default function Navbar({ menuItems = [] }: NavbarProps) {
   };
 
   return (
-    <nav>
+    <nav className="sticky top-0 z-50 bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-2 sm:px-16 lg:px-20">
         <div className="relative flex items-center justify-between h-24">
           {/* Mobile menu button */}

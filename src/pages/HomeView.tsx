@@ -6,7 +6,8 @@ import Button from "../components/buttons/Button";
 export default function HomeView() {
   return (
     <div className="relative min-h-screen bg-gray-100 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-white to-teal-50 z-0">
+      <h1 className="text-brand">test</h1>
+      {/* <div className="absolute inset-0 bg-gradient-to-b from-white to-teal-50 z-0">
         <div className="absolute top-0 left-0 w-full h-48 md:h-64">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -33,7 +34,7 @@ export default function HomeView() {
             ></path>
           </svg>
         </div>
-      </div>
+      </div> */}
 
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto px-4 py-12 md:py-24">
         <div className="w-full md:w-1/2 mb-10 md:mb-0">
