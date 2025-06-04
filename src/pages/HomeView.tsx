@@ -1,6 +1,6 @@
-import heroImage from "../assets/hero.png";
-import cardImage from "../assets/card-image.png";
-import whyMeImage from "../assets/whyme.png";
+import heroImage from "../assets/hero.webp";
+import cardImage from "../assets/card-image.webp";
+import whyMeImage from "../assets/whyme.webp";
 import Button from "../components/buttons/Button";
 
 export default function HomeView() {

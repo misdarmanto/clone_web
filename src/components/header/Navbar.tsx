@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Icon from "../../assets/icon.png";
+import Icon from "../../assets/icon.webp";
 import Button from "../buttons/Button";
 import { Link, useNavigate } from "react-router-dom";
 
