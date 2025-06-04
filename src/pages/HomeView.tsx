@@ -6,42 +6,12 @@ import Button from "../components/buttons/Button";
 export default function HomeView() {
   return (
     <div className="relative min-h-screen bg-gray-100 overflow-hidden">
-      <h1 className="text-brand">test</h1>
-      {/* <div className="absolute inset-0 bg-gradient-to-b from-white to-teal-50 z-0">
-        <div className="absolute top-0 left-0 w-full h-48 md:h-64">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1440 320"
-            className="w-full h-full"
-          >
-            <path
-              fill="#e6f7ff"
-              fillOpacity="0.7"
-              d="M0,96L80,106.7C160,117,320,139,480,149.3C640,160,800,160,960,138.7C1120,117,1280,75,1360,53.3L1440,32L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"
-            ></path>
-          </svg>
-        </div>
-        <div className="absolute bottom-0 left-0 w-full h-48 md:h-64 transform rotate-180">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1440 320"
-            className="w-full h-full"
-          >
-            <path
-              fill="#e6f7ff"
-              fillOpacity="0.5"
-              d="M0,96L80,106.7C160,117,320,139,480,149.3C640,160,800,160,960,138.7C1120,117,1280,75,1360,53.3L1440,32L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"
-            ></path>
-          </svg>
-        </div>
-      </div> */}
-
-      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto px-4 py-12 md:py-24">
+      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto px-4 py-8 md:py-12">
         <div className="w-full md:w-1/2 mb-10 md:mb-0">
-          <p className="text-gray-400 text-md mb-2 font-bold">
+          <p className="text-gray-400 text-h6 mb-1 font-bold">
             PORTAL SATU DATA LAMPUNG TIMUR
           </p>
-          <h1 className="text-5xl font-bold mb-4">
+          <h1 className="text-h1 mb-1">
             <span className="text-indigo-700">Akses Data</span>
             <br />
             <span className="text-red-600">Dalam Satu Portal</span>
