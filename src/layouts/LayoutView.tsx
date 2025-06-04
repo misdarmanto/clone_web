@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/header/Navbar";
+import Footer from "../components/footer/Footer";
 
 export default function LayoutView() {
   const menuItems = [
@@ -13,11 +14,10 @@ export default function LayoutView() {
   ];
 
   return (
-    <div>
+    <div className="mx-auto px-2 sm:px-16 lg:px-20">
       <Navbar menuItems={menuItems} />
-      <div className="mx-auto px-2 sm:px-16 lg:px-20">
-        <Outlet />
-      </div>
+      <Outlet />
+      <Footer />
     </div>
   );
 }

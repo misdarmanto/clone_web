@@ -20,9 +20,7 @@ export default function LoginView() {
         <h2 className="text-center text-blue-600 text-lg font-semibold mb-2">
           Welcome Back !
         </h2>
-        <h1 className="text-center text-2xl font-bold mb-1">
-          SISTEM SATU DATA
-        </h1>
+        <h1 className="text-center text-h2 mb-1">SISTEM SATU DATA</h1>
         <p className="text-center text-gray-600 mb-6">
           Masukkan Kredensial Dibawah Ini.
         </p>

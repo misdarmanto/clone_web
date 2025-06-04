@@ -80,7 +80,7 @@ export default function HomeView() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
         <div>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+          <h2 className="text-h1 text-gray-800 mb-4">
             Mengapa Menggunakan <br className="hidden md:block" />
             Satu Data Lamtim?
           </h2>
