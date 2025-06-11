@@ -112,7 +112,12 @@ export default function SectoralView() {
     <div>
       <div className="p-5 border border-gray-300 border-1 rounded-md">
         <Table data={data} columns={columns} loading={false} />
-        <Pagination />
+        <Pagination
+          currentPage={0}
+          totalPages={0}
+          onPrev={() => {}}
+          onNext={() => {}}
+        />
       </div>
     </div>
   );
