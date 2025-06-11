@@ -1,3 +1,4 @@
+import Button from "../components/buttons/Button";
 import Pagination from "../components/pagination/Pagination";
 import type { TableColumn } from "../components/table/Table";
 import Table from "../components/table/Table";
@@ -60,42 +61,6 @@ export default function SectoralView() {
       "2023": 0,
       "2024": 0,
     },
-    {
-      no: 6,
-      kodeDssd: "1.04.000005",
-      uraiDssd: "Backlog Kepenguhunian Rumah",
-      satuan: "Unit Rumah",
-      "2022": 0,
-      "2023": 0,
-      "2024": 0,
-    },
-    {
-      no: 7,
-      kodeDssd: "2.10.000002",
-      uraiDssd: "Berita Acara Kesepakatan Bentuk Ganti Kerugian",
-      satuan: "Berita Acara",
-      "2022": 0,
-      "2023": 0,
-      "2024": 0,
-    },
-    {
-      no: 8,
-      kodeDssd: "2.10.000003",
-      uraiDssd: "Berita Acara kesepakatan desain konsolidasi tanah",
-      satuan: "Berita Acara",
-      "2022": 0,
-      "2023": 0,
-      "2024": 0,
-    },
-    {
-      no: 9,
-      kodeDssd: "2.10.000004",
-      uraiDssd: "Berita Acara kesepakatan rencana aksl",
-      satuan: "Berita Acara",
-      "2022": 0,
-      "2023": 0,
-      "2024": 0,
-    },
   ];
 
   const columns: TableColumn<TableData>[] = [
@@ -110,6 +75,48 @@ export default function SectoralView() {
 
   return (
     <div>
+      <h2 className="text-h2 text-orange-300 mb-4">
+        Data Sektoral Berdasarkan OPD
+      </h2>
+      <div className="mb-6 w-full border border-gray-300 border-1 rounded-md bg-white p-5">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div className="col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Perangkat Daerah
+            </label>
+            <select className="w-full rounded-md border border-gray-300 p-2 text-sm focus:ring-2 focus:ring-blue-500">
+              <option>Dinas Pekerjaan Umum dan Penataan Ruang</option>
+              <option>Dinas Pekerjaan </option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Dari Tahun
+            </label>
+            <input
+              type="number"
+              placeholder="Dari Tahun"
+              className="w-full rounded-md border border-gray-300 p-2 text-sm focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Sampai Tahun
+            </label>
+            <input
+              type="number"
+              placeholder="Sampai Tahun"
+              className="w-full rounded-md border border-gray-300 p-2 text-sm focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div className="flex items-end justify-center">
+            <Button>Tampilkan</Button>
+          </div>
+        </div>
+      </div>
+
       <div className="p-5 border border-gray-300 border-1 rounded-md">
         <Table data={data} columns={columns} loading={false} />
         <Pagination

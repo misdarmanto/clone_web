@@ -16,7 +16,9 @@ export default function LayoutView() {
   return (
     <div className="mx-auto px-2 sm:px-16 lg:px-20">
       <Navbar menuItems={menuItems} />
-      <Outlet />
+      <div className="md:py-8">
+        <Outlet />
+      </div>
       <Footer />
     </div>
   );
