@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Button from "../components/buttons/Button";
 import Pagination from "../components/pagination/Pagination";
 import type { TableColumn } from "../components/table/Table";
@@ -14,7 +15,7 @@ export default function SectoralView() {
     "2024": number;
   }
 
-  const data: TableData[] = [
+  const allData: TableData[] = [
     {
       no: 1,
       kodeDssd: "1.04.000001",
@@ -73,6 +74,13 @@ export default function SectoralView() {
     { key: "2024", title: "2024" },
   ];
 
+  const itemsPerPage = 4;
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const totalPages = Math.ceil(allData.length / itemsPerPage);
+  const startIndex = currentPage * itemsPerPage;
+  const paginatedData = allData.slice(startIndex, startIndex + itemsPerPage);
+
   return (
     <div>
       <h2 className="text-h2 text-orange-300 mb-4">
@@ -118,12 +126,14 @@ export default function SectoralView() {
       </div>
 
       <div className="p-5 border border-gray-300 border-1 rounded-md">
-        <Table data={data} columns={columns} loading={false} />
+        <Table data={paginatedData} columns={columns} loading={false} />
         <Pagination
-          currentPage={0}
-          totalPages={0}
-          onPrev={() => {}}
-          onNext={() => {}}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPrev={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
+          onNext={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))
+          }
         />
       </div>
     </div>
