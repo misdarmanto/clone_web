@@ -80,12 +80,6 @@ export default function HomeView() {
               </div>
             }
           />
-          // <div
-          //   className="bg-white shadow-sm p-8 flex flex-col justify-between"
-          // >
-
-          //
-          // </div>
         ))}
       </div>
 
