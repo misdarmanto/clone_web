@@ -5,7 +5,7 @@ import { FaCheck, FaArrowRight } from "react-icons/fa";
 const meta: Meta<typeof Button> = {
   title: "Components/Button",
   component: Button,
-  tags: ["autodocs"], // enables autodocs if supported
+  tags: ["autodocs"],
   argTypes: {
     onClick: { action: "clicked" },
   },
