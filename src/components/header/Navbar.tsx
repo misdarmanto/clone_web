@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Icon from "../../assets/icon.webp";
 import Button from "../buttons/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 type MenuItem = {
   label: string;
@@ -14,6 +14,7 @@ interface NavbarProps {
 
 export default function Navbar({ menuItems = [] }: NavbarProps) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -24,6 +25,8 @@ export default function Navbar({ menuItems = [] }: NavbarProps) {
 
   return (
     <nav className="sticky top-0 z-50 bg-white">
+      {/* Desktop menu */}
+
       <div className="relative flex items-center justify-between h-24">
         {/* Mobile menu button */}
         <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -72,15 +75,21 @@ export default function Navbar({ menuItems = [] }: NavbarProps) {
           {/* Desktop menu */}
           <div className="hidden sm:block sm:ml-6">
             <div className="flex space-x-4 mt-4">
-              {menuItems.map((menu) => (
-                <Link
-                  key={menu.label}
-                  to={menu.href}
-                  className="text-h6 text-gray-400 hover:text-gray-700 px-2 font-bold"
-                >
-                  {menu.label}
-                </Link>
-              ))}
+              {menuItems.map((menu) => {
+                const isActive = location.pathname === menu.href;
+
+                return (
+                  <Link
+                    key={menu.label}
+                    to={menu.href}
+                    className={`text-h6 text-gray-400 hover:text-gray-700 ${
+                      isActive ? "text-gray-700" : ""
+                    } px-2 font-bold`}
+                  >
+                    {menu.label}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -93,12 +102,13 @@ export default function Navbar({ menuItems = [] }: NavbarProps) {
 
       {/* Mobile menu */}
       <div className={isMenuOpen ? "block" : "hidden"} id="mobile-menu">
-        <div className="px-2 pt-2 pb-3 space-y-1 border-t">
+        <div className="px-2 pt-2 pb-3 space-y-1 border-t absolute top-full left-0 w-full bg-white z-50">
           {menuItems.map((menu) => (
             <Link
               key={menu.label}
               to={menu.href}
-              className="text-gray-400 hover:text-gray-700 px-3 py-2 font-bold"
+              onClick={toggleMenu}
+              className="block text-gray-400 hover:text-gray-700 px-3 py-2 font-bold"
             >
               {menu.label}
             </Link>

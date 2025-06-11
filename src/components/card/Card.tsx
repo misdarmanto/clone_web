@@ -15,7 +15,7 @@ export default function Card({
 }: DataCardProps) {
   return (
     <div
-      className={`bg-white rounded-xl shadow-md p-5 w-full flex flex-col gap-2 ${className}`}
+      className={`bg-white shadow-md p-3 w-full flex flex-col gap-2 ${className}`}
     >
       {header && <div className="flex justify-center">{header}</div>}
       {body && <div className="flex flex-col text-center gap-2">{body}</div>}

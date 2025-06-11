@@ -80,29 +80,23 @@ export default function HomeView() {
               </div>
             }
           />
-          // <div
-          //   className="bg-white shadow-sm p-8 flex flex-col justify-between"
-          // >
-
-          //
-          // </div>
         ))}
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-        <div>
+        <div className="order-2 md:order-1">
           <h2 className="text-h1 text-gray-800 mb-4">
             Mengapa Menggunakan <br className="hidden md:block" />
             Satu Data Lamtim?
           </h2>
-          <p className="text-gray-600 leading-relaxed">
+          <p className="text-gray-600 leading-relaxed ">
             Satu Data adalah sebuah inisiatif pemerintah Indonesia untuk
             mendorong pengambilan kebijakan berdasarkan data. Untuk mewujudkan
             hal tersebut, maka diperlukan pemenuhan atas data pemerintah yang
             akurat, terbuka, dan interoperable.
           </p>
         </div>
-        <div className="flex justify-center">
+        <div className="flex justify-center order-1 md:order-2">
           <img
             src={whyMeImage}
             alt="Mengapa Satu Data"
