@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Icon from "../../assets/icon.webp";
 import Button from "../buttons/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 type MenuItem = {
   label: string;
@@ -14,6 +14,7 @@ interface NavbarProps {
 
 export default function Navbar({ menuItems = [] }: NavbarProps) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -74,15 +75,21 @@ export default function Navbar({ menuItems = [] }: NavbarProps) {
           {/* Desktop menu */}
           <div className="hidden sm:block sm:ml-6">
             <div className="flex space-x-4 mt-4">
-              {menuItems.map((menu) => (
-                <Link
-                  key={menu.label}
-                  to={menu.href}
-                  className="text-h6 text-gray-400 hover:text-gray-700 px-2 font-bold"
-                >
-                  {menu.label}
-                </Link>
-              ))}
+              {menuItems.map((menu) => {
+                const isActive = location.pathname === menu.href;
+
+                return (
+                  <Link
+                    key={menu.label}
+                    to={menu.href}
+                    className={`text-h6 text-gray-400 hover:text-gray-700 ${
+                      isActive ? "text-gray-700" : ""
+                    } px-2 font-bold`}
+                  >
+                    {menu.label}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -100,6 +107,7 @@ export default function Navbar({ menuItems = [] }: NavbarProps) {
             <Link
               key={menu.label}
               to={menu.href}
+              onClick={toggleMenu}
               className="block text-gray-400 hover:text-gray-700 px-3 py-2 font-bold"
             >
               {menu.label}

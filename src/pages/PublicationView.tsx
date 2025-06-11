@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Button from "../components/buttons/Button";
 import Pagination from "../components/pagination/Pagination";
 import type { TableColumn } from "../components/table/Table";
 import Table from "../components/table/Table";
@@ -11,6 +10,7 @@ export default function PublicationView() {
     PerangkatDaerah: string;
     tahun: string;
     dibuatPada: string;
+    aksi: string;
   }
 
   const allData: TableData[] = [
@@ -21,6 +21,7 @@ export default function PublicationView() {
       PerangkatDaerah: "Dinas Komunikasi dan Informatika",
       tahun: "2025",
       dibuatPada: "21-08-2025",
+      aksi: "lihat",
     },
     {
       no: 2,
@@ -29,6 +30,7 @@ export default function PublicationView() {
       PerangkatDaerah: "Dinas Komunikasi dan Informatika",
       tahun: "2025",
       dibuatPada: "21-08-2025",
+      aksi: "lihat",
     },
     {
       no: 3,
@@ -37,6 +39,7 @@ export default function PublicationView() {
       PerangkatDaerah: "Dinas Komunikasi dan Informatika",
       tahun: "2025",
       dibuatPada: "21-08-2025",
+      aksi: "lihat",
     },
   ];
 
@@ -46,6 +49,7 @@ export default function PublicationView() {
     { key: "PerangkatDaerah", title: "Perangkat Daerah" },
     { key: "tahun", title: "Tahun" },
     { key: "dibuatPada", title: "Dibuat Pada" },
+    { key: "aksi", title: "Aksi" },
   ];
 
   const itemsPerPage = 5;
