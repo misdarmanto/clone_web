@@ -6,7 +6,7 @@ interface InputFieldProps {
   placeholder?: string;
   type?: string;
   error?: FieldError;
-  registration: UseFormRegisterReturn;
+  registration?: UseFormRegisterReturn;
 }
 
 export const InputField: React.FC<InputFieldProps> = ({
@@ -14,7 +14,7 @@ export const InputField: React.FC<InputFieldProps> = ({
   placeholder,
   type = "text",
   error,
-  registration,
+  registration = {},
 }) => {
   return (
     <div>
@@ -24,8 +24,8 @@ export const InputField: React.FC<InputFieldProps> = ({
         placeholder={placeholder}
         className={`w-full border ${
           error ? "border-red-500" : "border-gray-300"
-        } rounded-md p-2 focus:outline-none focus:ring-2 ${
-          error ? "focus:ring-red-400" : "focus:ring-blue-400"
+        } rounded-md p-2 focus:outline-none focus:ring-1 ${
+          error ? "focus:ring-red-400" : "focus:ring-gray-400"
         }`}
         {...registration}
       />

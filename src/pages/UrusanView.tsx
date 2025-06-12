@@ -3,6 +3,7 @@ import Button from "../components/buttons/Button";
 import Pagination from "../components/pagination/Pagination";
 import type { TableColumn } from "../components/table/Table";
 import Table from "../components/table/Table";
+import { InputField } from "../components/input/InputField";
 
 export default function UrusanView() {
   interface TableData {
@@ -98,27 +99,16 @@ export default function UrusanView() {
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Dari Tahun
-            </label>
-            <input
-              type="number"
-              placeholder="Dari Tahun"
-              className="w-full rounded-md border border-gray-300 p-2 text-sm focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Sampai Tahun
-            </label>
-            <input
-              type="number"
-              placeholder="Sampai Tahun"
-              className="w-full rounded-md border border-gray-300 p-2 text-sm focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+          <InputField
+            label="Dari Tahun"
+            type="number"
+            placeholder="Dari Tahun.."
+          />
+          <InputField
+            label="Sampai Tahun"
+            type="number"
+            placeholder="Sampai Tahun..."
+          />
           <div className="flex items-end justify-center">
             <Button>Tampilkan</Button>
           </div>

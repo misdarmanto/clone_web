@@ -1,49 +1,82 @@
-// import Card from "../components/card/Card";
-// import organizationImage from "../assets/oragnization.webp";
-// import Button from "../components/buttons/Button";
+import { useState } from "react";
+import organizationImage from "../assets/oragnization.webp";
+
+const categories = [
+  "Semua",
+  "Puskesmas",
+  "Badan",
+  "Bagian",
+  "Dinas",
+  "Sekretariat",
+  "Inspektorat",
+  "Satuan",
+  "Rumah",
+];
+
+const orgData = [
+  {
+    count: 459,
+    name: "Dinas Pendidikan dan Kebudayaan",
+  },
+  {
+    count: 353,
+    name: "Dinas Lingkungan Hidup, Perumahan, Kawasan Permukiman, dan Pertanahan",
+  },
+  {
+    count: 265,
+    name: "Dinas Pekerjaan Umum dan Penataan Ruang",
+  },
+  {
+    count: 261,
+    name: "Dinas Kesehatan",
+  },
+];
 
 export default function OrganizationView() {
-  return (
-    <div>
-      <h2 className="text-h2 text-orange-300 mb-4">Organisasi</h2>
+  const [activeCategory, setActiveCategory] = useState("Semua");
 
-      {/* <div>
-        {["Semua", "Puskesmas", "Badan", "Bagian", "Dinas"].map((item) => (
-          <Button variant="outlined">{item}</Button>
+  return (
+    <div className="max-w-6xl mx-auto px-4 py-10">
+      <h2 className="text-h2 text-orange-400 font-bold mb-6">Organisasi</h2>
+
+      {/* Category Filter Buttons */}
+      <div className="flex flex-wrap gap-2 mb-8">
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setActiveCategory(cat)}
+            className={`px-4 py-2 rounded text-sm font-semibold ${
+              activeCategory === cat
+                ? "bg-orange-500 text-white"
+                : "bg-gray-400 text-white"
+            }`}
+          >
+            {cat}
+          </button>
         ))}
       </div>
-      <div className="relative z-10 max-w-7xl mx-auto px-4 pb-20 grid grid-cols-1 md:grid-cols-3 gap-6">
-        {[
-          {
-            title: "Data Sectoral",
-            total: 365,
-            desc: "Dinas Pendidikan dan Kebudayaan",
-          },
-        ].map((item, index) => (
-          <Card
+
+      {/* Card Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {orgData.map((org, index) => (
+          <div
             key={index}
-            className="w-56 rounded-md border border-gray-300 p-5"
-            header={
-              <div>
-                <div className="flex justify-center p-10 rounded-xl">
-                  <img
-                    src={organizationImage}
-                    alt="card image"
-                    loading="lazy"
-                  />
-                </div>
-                <h3 className="text-h5 text-orange-300 text-center">
-                  {item.total}
-                </h3>
-                <h3 className="text-h5 text-orange-300 text-center">
-                  {item.title}
-                </h3>
-              </div>
-            }
-            body={<p className="text-sm text-gray-600">{item.desc}</p>}
-          />
+            className="bg-white rounded shadow p-6 text-center hover:shadow-lg transition"
+          >
+            <img
+              src={organizationImage}
+              alt="Organization"
+              loading="lazy"
+              className="mx-auto mb-4 h-20"
+            />
+            <p className="text-xl font-bold text-orange-500 mb-1">
+              {org.count}
+            </p>
+            <p className="font-semibold text-gray-700 mb-2">Data Sektoral</p>
+            <p className="text-sm text-gray-500">{org.name}</p>
+          </div>
         ))}
-      </div> */}
+      </div>
     </div>
   );
 }

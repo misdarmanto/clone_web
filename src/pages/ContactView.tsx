@@ -82,7 +82,8 @@ export default function ContactView() {
                 </label>
                 <textarea
                   id="message"
-                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 h-32 resize-none"
+                  {...register("nip")}
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500 h-32 resize-none"
                   placeholder="Tulis pesan Anda"
                 />
               </div>
