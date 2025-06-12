@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginFormData } from "../schema/loginSchema";
 import Button from "../components/buttons/Button";
 import { Eye, EyeOff } from "lucide-react";
+import { InputField } from "../components/input/InputField";
 
 export default function LoginView() {
   const [showPassword, setShowPassword] = useState(false);
@@ -32,22 +33,11 @@ export default function LoginView() {
         </p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label className="block font-medium">NIP</label>
-            <input
-              type="text"
-              {...register("nip")}
-              placeholder="Enter NIP"
-              className={`w-full border ${
-                errors.nip ? "border-red-500" : "border-gray-300"
-              } rounded-md p-2 focus:outline-none focus:ring-2 ${
-                errors.nip ? "focus:ring-red-400" : "focus:ring-blue-400"
-              }`}
-            />
-            {errors.nip && (
-              <p className="text-red-500 text-sm mt-1">{errors.nip.message}</p>
-            )}
-          </div>
+          <InputField
+            label={"NIP"}
+            registration={register("nip")}
+            error={errors.nip}
+          />
 
           <div>
             <label className="block font-medium">Password</label>
