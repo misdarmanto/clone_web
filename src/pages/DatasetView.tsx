@@ -1,3 +1,5 @@
+import { InputField } from "../components/input/InputField";
+
 export default function DataSetView() {
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -39,11 +41,8 @@ export default function DataSetView() {
         {/* Main Content: List Dataset */}
         <div className="lg:col-span-3 bg-white p-4 rounded shadow">
           <div className="flex items-center justify-between mb-4 gap-4 flex-wrap">
-            <input
-              type="text"
-              placeholder="Cari Dataset"
-              className="flex-1 min-w-[200px] p-2 border rounded"
-            />
+            <InputField placeholder="Cari Dataset" label={""} />
+
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-600">Urutkan :</span>
               <select className="p-2 border rounded text-sm">
