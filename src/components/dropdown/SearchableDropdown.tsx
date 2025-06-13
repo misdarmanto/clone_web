@@ -11,7 +11,7 @@ interface SearchableDropdownProps {
   placeholder?: string;
 }
 
-export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
+const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
   options,
   onSelect,
   placeholder = "Pilih OPD",
@@ -65,3 +65,5 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
     </div>
   );
 };
+
+export default SearchableDropdown;

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { SearchableDropdown } from "./SearchAbleDropdown";
+import SearchableDropdown from "./SearchableDropdown";
 
 const meta: Meta<typeof SearchableDropdown> = {
   title: "Components/SearchableDropdown",

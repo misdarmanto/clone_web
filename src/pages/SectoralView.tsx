@@ -4,7 +4,7 @@ import Pagination from "../components/pagination/Pagination";
 import type { TableColumn } from "../components/table/Table";
 import Table from "../components/table/Table";
 import { InputField } from "../components/input/InputField";
-import { SearchableDropdown } from "../components/dropdown/SearchAbleDropdown";
+import SearchableDropdown from "../components/dropdown/SearchableDropdown";
 
 export default function SectoralView() {
   interface TableData {
