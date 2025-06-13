@@ -67,11 +67,13 @@ export default function ContactView() {
                 label={"Nama"}
                 registration={register("nip")}
                 error={errors.nip}
+                fullWidth
               />
               <InputField
                 label={"Alamat Email"}
                 registration={register("nip")}
                 error={errors.nip}
+                fullWidth
               />
               <div>
                 <label

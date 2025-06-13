@@ -3,7 +3,7 @@ import { type FieldError, type UseFormRegisterReturn } from "react-hook-form";
 import clsx from "clsx";
 
 interface InputFieldProps {
-  label: string;
+  label?: string;
   placeholder?: string;
   type?: string;
   error?: FieldError;

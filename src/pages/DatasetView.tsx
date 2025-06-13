@@ -1,24 +1,23 @@
 import { InputField } from "../components/input/InputField";
+import emptyIcon from "../assets/empty.webp";
+import Pagination from "../components/pagination/Pagination";
 
 export default function DataSetView() {
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <h2 className="text-3xl font-bold text-orange-400 mb-2">Dataset</h2>
-      <p className="text-gray-600 mb-6">
+    <div className="min-h-screen">
+      <h2 className="text-h2 text-orange-300 mb-2">Dataset</h2>
+      <p className="text-p mb-6">
         Temukan kumpulan data-data mentah berupa tabel yang bisa diolah lebih
         lanjut di sini. Open Data menyediakan akses ke beragam koleksi dataset
         dari seluruh Organisasi Perangkat Daerah di Lampung Timur.
       </p>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-6 ">
         {/* Sidebar: Produsen Dataset */}
-        <div className="lg:col-span-1 bg-white p-4 rounded shadow space-y-2">
-          <h3 className="font-semibold mb-2">Produsen Dataset</h3>
-          <input
-            type="text"
-            placeholder="Cari Produsen"
-            className="w-full p-2 border rounded mb-3"
-          />
+        <div className="lg:col-span-2 space-y-2 sm:mr-5 mb-5 sm:mb-0 p-5 border rounded border-gray-300">
+          <p className="text-h4 mb-2">Produsen Dataset</p>
+
+          <InputField placeholder="Cari Produsen" fullWidth />
           {[
             "Kecamatan Purbolinggo",
             "Puskesmas Trimulyo",
@@ -31,7 +30,7 @@ export default function DataSetView() {
           ].map((name, i) => (
             <button
               key={i}
-              className="w-full text-left px-3 py-2 border rounded hover:bg-gray-100 text-sm"
+              className="w-full text-left px-3 py-2 border border-gray-200 rounded hover:bg-gray-100 text-sm"
             >
               {name}
             </button>
@@ -39,24 +38,30 @@ export default function DataSetView() {
         </div>
 
         {/* Main Content: List Dataset */}
-        <div className="lg:col-span-3 bg-white p-4 rounded shadow">
-          <div className="flex items-center justify-between mb-4 gap-4 flex-wrap">
-            <InputField placeholder="Cari Dataset" label={""} />
+        <div className="lg:col-span-4 p-5 border rounded border-gray-300">
+          <p className="text-h4 mb-2">List Dataset</p>
+          <InputField
+            placeholder="Cari Dataset"
+            label={""}
+            fullWidth
+            className="mb-2"
+          />
+          <div className="flex items-center justify-between mb-5 gap-4 flex-wrap">
+            <p className="text-sm text-gray-500 mb-6">228 Dataset Ditemukan</p>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600">Urutkan :</span>
               <select className="p-2 border rounded text-sm">
                 <option>Abjad</option>
+                <option>Terbaru</option>
+                <option>Terlama</option>
               </select>
             </div>
           </div>
 
-          <p className="text-sm text-gray-500 mb-6">228 Dataset Ditemukan</p>
-
-          {/* Empty State */}
           <div className="text-center py-20">
             <img
-              src="/empty-box.png"
+              src={emptyIcon}
               alt="Empty box"
               className="mx-auto mb-4 w-24"
             />
@@ -66,15 +71,16 @@ export default function DataSetView() {
           </div>
 
           {/* Pagination */}
-          <div className="flex items-center justify-between mt-6 text-sm text-gray-700">
-            <button className="px-4 py-2 bg-indigo-200 text-indigo-800 rounded disabled:opacity-50">
-              Previous
-            </button>
-            <span>Page 1 of 33</span>
-            <button className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
-              Next
-            </button>
-          </div>
+          <Pagination
+            currentPage={0}
+            totalPages={0}
+            onPrev={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+            onNext={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+          />
         </div>
       </div>
     </div>
