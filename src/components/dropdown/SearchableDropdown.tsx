@@ -52,7 +52,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
               <li
                 key={opt.value}
                 onClick={() => handleSelect(opt)}
-                className="p-2 hover:bg-blue-100 cursor-pointer"
+                className="p-2 hover:bg-gray-200 cursor-pointer"
               >
                 {opt.label}
               </li>
