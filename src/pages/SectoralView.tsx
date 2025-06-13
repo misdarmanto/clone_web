@@ -4,6 +4,7 @@ import Pagination from "../components/pagination/Pagination";
 import type { TableColumn } from "../components/table/Table";
 import Table from "../components/table/Table";
 import { InputField } from "../components/input/InputField";
+import { SearchableDropdown } from "../components/dropdown/SearchAbleDropdown";
 
 export default function SectoralView() {
   interface TableData {
@@ -75,6 +76,22 @@ export default function SectoralView() {
     { key: "2024", title: "2024" },
   ];
 
+  const opdList = [
+    { value: "pendidikan", label: "Dinas Pendidikan dan Kebudayaan" },
+    {
+      value: "lingkungan",
+      label:
+        "Dinas Lingkungan Hidup, Perumahan, Kawasan Permukiman, dan Pertanahan",
+    },
+    {
+      value: "pu",
+      label: "Dinas Pekerjaan Umum dan Penataan Ruang",
+    },
+    { value: "kesehatan", label: "Dinas Kesehatan" },
+    { value: "perhubungan", label: "Dinas Perhubungan" },
+    { value: "polpp", label: "Satuan Polisi Pamong Praja" },
+  ];
+
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(0);
 
@@ -90,13 +107,11 @@ export default function SectoralView() {
       <div className="mb-6 w-full border border-gray-300 border-1 rounded-md bg-white p-5">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div className="col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Perangkat Daerah
-            </label>
-            <select className="w-full rounded-md border border-gray-300 p-2 text-sm focus:ring-2 focus:ring-blue-500">
-              <option>Dinas Pekerjaan Umum dan Penataan Ruang</option>
-              <option>Dinas Pekerjaan </option>
-            </select>
+            <label className="block font-medium mb-1">Perangkat Daerah</label>
+            <SearchableDropdown
+              options={opdList}
+              onSelect={(val) => console.log("Selected:", val)}
+            />
           </div>
           <InputField
             label="Dari Tahun"
