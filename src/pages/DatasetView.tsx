@@ -1,8 +1,23 @@
 import { InputField } from "../components/input/InputField";
 import emptyIcon from "../assets/empty.webp";
 import Pagination from "../components/pagination/Pagination";
+import { CalendarDays, Clock, Building2 } from "lucide-react";
+import folderIcon from "../assets/folder.webp";
 
 export default function DataSetView() {
+  const dataSetProdusen = [
+    "Kecamatan Purbolinggo",
+    "Puskesmas Trimulyo",
+    "Puskesmas Adirejo",
+    "Kecamatan Marga Tiga",
+    "Badan Pendapatan Daerah",
+    "Puskesmas Jabung",
+    "Puskesmas Labuhan Maringgai",
+    "Puskesmas Raman Utara",
+  ];
+
+  const dataSet = [1, 2, 3];
+
   return (
     <div className="min-h-screen">
       <h2 className="text-h2 text-orange-300 mb-2">Dataset</h2>
@@ -18,16 +33,7 @@ export default function DataSetView() {
           <p className="text-h4 mb-2">Produsen Dataset</p>
 
           <InputField placeholder="Cari Produsen" fullWidth />
-          {[
-            "Kecamatan Purbolinggo",
-            "Puskesmas Trimulyo",
-            "Puskesmas Adirejo",
-            "Kecamatan Marga Tiga",
-            "Badan Pendapatan Daerah",
-            "Puskesmas Jabung",
-            "Puskesmas Labuhan Maringgai",
-            "Puskesmas Raman Utara",
-          ].map((name, i) => (
+          {dataSetProdusen.map((name, i) => (
             <button
               key={i}
               className="w-full text-left px-3 py-2 border border-gray-200 rounded hover:bg-gray-100 text-sm"
@@ -46,7 +52,7 @@ export default function DataSetView() {
             fullWidth
             className="mb-2"
           />
-          <div className="flex items-center justify-between mb-5 gap-4 flex-wrap">
+          <div className="flex items-center justify-between gap-4 flex-wrap">
             <p className="text-sm text-gray-500 mb-6">228 Dataset Ditemukan</p>
 
             <div className="flex items-center justify-between">
@@ -59,15 +65,56 @@ export default function DataSetView() {
             </div>
           </div>
 
-          <div className="text-center py-20">
-            <img
-              src={emptyIcon}
-              alt="Empty box"
-              className="mx-auto mb-4 w-24"
-            />
-            <p className="text-lg font-semibold text-gray-600">
-              Dataset Tidak Ditemukan!
-            </p>
+          <div className="space-y-4">
+            {dataSet.map((_) => (
+              <div
+                key={_}
+                className="border border-gray-300 rounded-md shadow p-4 flex flex-col gap-2 w-full"
+              >
+                <div className="flex items-center gap-3">
+                  <img
+                    src={folderIcon}
+                    alt="Empty box"
+                    className="mx-auto w-20"
+                  />
+
+                  <div>
+                    <h2 className="font-semibold text-sm">
+                      Anak Telantar yang mendapat permakanan sesuai dengan
+                      Standar Gizi Minimal
+                    </h2>
+                    <p className="text-sm text-gray-600">11 orang.</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-6 text-sm text-gray-500 mt-2">
+                  <div className="flex items-center gap-1">
+                    <Building2 size={16} />
+                    <span>Dinas Sosial</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <CalendarDays size={16} />
+                    <span>10-12-2024</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Clock size={16} />
+                    <span>1 hari yang lalu</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {Array.isArray(dataSet) && dataSet.length < 0 && (
+              <div className="text-center py-20">
+                <img
+                  src={emptyIcon}
+                  alt="Empty box"
+                  className="mx-auto mb-4 w-24"
+                />
+                <p className="text-lg font-semibold text-gray-600">
+                  Dataset Tidak Ditemukan!
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Pagination */}
