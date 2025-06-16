@@ -1,6 +1,8 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/header/Navbar";
 import Footer from "../components/footer/Footer";
+import { useAppContext } from "../context/app.context";
+import Snackbar from "../components/snackbar/Snackbar";
 
 export default function LayoutView() {
   const menuItems = [
@@ -13,12 +15,22 @@ export default function LayoutView() {
     { label: "Kontak", href: "/contacts" },
   ];
 
+  const { appAlert, setAppAlert } = useAppContext();
+
   return (
     <div className="mx-auto px-2 sm:px-16 lg:px-20">
       <Navbar menuItems={menuItems} />
       <div className="md:py-5">
         <Outlet />
       </div>
+      <Snackbar
+        open={true}
+        severity="error"
+        message={"Error not found!"}
+        onClose={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
       <Footer />
     </div>
   );
