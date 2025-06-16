@@ -24,12 +24,16 @@ export default function LayoutView() {
         <Outlet />
       </div>
       <Snackbar
-        open={true}
+        open={appAlert.isDisplayAlert}
         severity="error"
-        message={"Error not found!"}
-        onClose={function (): void {
-          throw new Error("Function not implemented.");
-        }}
+        message={appAlert.message}
+        onClose={() =>
+          setAppAlert({
+            isDisplayAlert: false,
+            alertType: undefined,
+            message: "",
+          })
+        }
       />
       <Footer />
     </div>
