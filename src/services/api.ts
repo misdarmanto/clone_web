@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import { appConfigs } from "../configs/appConfigs";
 
@@ -17,8 +16,8 @@ export const getHeaders = () => {
   };
 };
 
-export class ServiceHttp {
-  private baseUrl = appConfigs.baseUrl;
+export class HttpService {
+  private baseUrl = appConfigs.apiUrl;
 
   public async get({ path }: { path: string }) {
     try {
@@ -27,8 +26,9 @@ export class ServiceHttp {
           ...getHeaders(),
         },
       });
-      return result.data.data;
+      return result.data;
     } catch (error: any) {
+      console.log(error);
       console.log(error.response.data.errorMessage || error.message);
 
       if (error.response && error.response.status === 401) {
@@ -114,7 +114,7 @@ export class ServiceHttp {
       );
 
       return {
-        ...result.data.data,
+        ...result.data,
         page: page,
         size: size,
       };

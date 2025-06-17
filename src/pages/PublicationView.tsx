@@ -1,86 +1,58 @@
-import { useState } from "react";
-import Pagination from "../components/pagination/Pagination";
+import { useEffect, useState } from "react";
 import type { TableColumn } from "../components/table/Table";
 import Table from "../components/table/Table";
 import { Link } from "react-router-dom";
+import { useHttp } from "../hooks/http";
+import type { IPublication } from "../types/publication.interface";
 
 export default function PublicationView() {
-  interface TableData {
-    no: number;
-    judul: string;
-    PerangkatDaerah: string;
-    tahun: string;
-    dibuatPada: string;
-    aksi: string;
-  }
+  const { handleGetRequest } = useHttp();
+  const [publicationList, setPublicationList] = useState<IPublication[]>();
+  const [loading, setLoading] = useState(false);
 
-  const allData: TableData[] = [
-    {
-      no: 1,
-      judul:
-        "Basis Data dan Profil Pendidikan Kab. Lampung Timur Tahun 2022/2023",
-      PerangkatDaerah: "Dinas Komunikasi dan Informatika",
-      tahun: "2025",
-      dibuatPada: "21-08-2025",
-      aksi: "lihat",
-    },
-    {
-      no: 2,
-      judul:
-        "Basis Data dan Profil Pendidikan Kab. Lampung Timur Tahun 2022/2023",
-      PerangkatDaerah: "Dinas Komunikasi dan Informatika",
-      tahun: "2025",
-      dibuatPada: "21-08-2025",
-      aksi: "lihat",
-    },
-    {
-      no: 3,
-      judul:
-        "Basis Data dan Profil Pendidikan Kab. Lampung Timur Tahun 2022/2023",
-      PerangkatDaerah: "Dinas Komunikasi dan Informatika",
-      tahun: "2025",
-      dibuatPada: "21-08-2025",
-      aksi: "lihat",
-    },
-  ];
+  const handleGetDetailPublication = async () => {
+    try {
+      setLoading(true);
+      const result = (await handleGetRequest({
+        path: "/buku-digital",
+      })) as IPublication[];
+      setPublicationList(result);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const columns: TableColumn<TableData>[] = [
-    { key: "no", title: "No" },
-    { key: "judul", title: "Judul Publikasi" },
-    { key: "PerangkatDaerah", title: "Perangkat Daerah" },
-    { key: "tahun", title: "Tahun" },
-    { key: "dibuatPada", title: "Dibuat Pada" },
+  useEffect(() => {
+    handleGetDetailPublication();
+  }, []);
+
+  const columns: TableColumn<IPublication>[] = [
+    { key: "id_buku_digital", title: "No" },
     {
-      key: "aksi",
-      title: "Aksi",
+      key: "buku",
+      title: "Judul Publikasi",
       render: (row) => (
         <Link to={`/detail/${row}`}>
           <strong>Lihat</strong>
         </Link>
       ),
     },
+    { key: "nama_opd", title: "Perangkat Daerah" },
+    { key: "tahun", title: "Tahun" },
+    { key: "created_at", title: "Dibuat Pada" },
   ];
-
-  const itemsPerPage = 5;
-  const [currentPage, setCurrentPage] = useState(0);
-
-  const totalPages = Math.ceil(allData.length / itemsPerPage);
-  const startIndex = currentPage * itemsPerPage;
-  const paginatedData = allData.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <div>
       <h2 className="text-h2 text-orange-300 mb-4">Data Publikasi</h2>
 
       <div className="p-5 border border-gray-300 border-1 rounded-md">
-        <Table data={paginatedData} columns={columns} loading={false} />
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPrev={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
-          onNext={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))
-          }
+        <Table
+          data={publicationList ?? []}
+          columns={columns}
+          loading={loading}
         />
       </div>
     </div>

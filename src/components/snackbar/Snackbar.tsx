@@ -39,7 +39,7 @@ const Snackbar: React.FC<SnackbarProps> = ({
     if (!visible && !open) {
       const fadeOutTimer = setTimeout(() => {
         onClose();
-      }, 300); // Match transition time
+      }, 1000); // Match transition time
 
       return () => clearTimeout(fadeOutTimer);
     }
@@ -48,13 +48,13 @@ const Snackbar: React.FC<SnackbarProps> = ({
   const getBgColor = () => {
     switch (severity) {
       case "success":
-        return "bg-green-600 text-white";
+        return "bg-green-500 text-white";
       case "error":
-        return "bg-red-600 text-white";
+        return "bg-red-500 text-white";
       case "warning":
-        return "bg-yellow-600 text-white";
+        return "bg-yellow-500 text-white";
       default:
-        return "bg-blue-600 text-white";
+        return "bg-blue-500 text-white";
     }
   };
 
