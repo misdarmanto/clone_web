@@ -59,8 +59,8 @@ const Table = <T extends object>({
           </tr>
         </thead>
         <tbody>
-          {data.map((item) => (
-            <tr key={`tr-${String(item[columns[0].key])}`}>
+          {data.map((item, index) => (
+            <tr key={`tr-${String(item[columns[0].key])}-${index}`}>
               {columns.map((column) => (
                 <td
                   key={`td-${String(column.key)}`}

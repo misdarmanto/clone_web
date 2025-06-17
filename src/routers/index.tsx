@@ -2,13 +2,14 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import HomeView from "../pages/HomeView";
 import NotfoundView from "../pages/404";
 import LayoutView from "../layouts/LayoutView";
-import DataSetView from "../pages/DatasetView";
+import DatasetListView from "../pages/dataset/DatasetListView";
 import SectoralView from "../pages/SectoralView";
 import UrusanView from "../pages/UrusanView";
 import OrganizationView from "../pages/OrganizationView";
 import PublicationView from "../pages/PublicationView";
 import ContactView from "../pages/ContactView";
 import LoginView from "../pages/LoginView";
+import DatasetDetailView from "../pages/dataset/DatasetDetailView";
 
 export default function AppRouters() {
   const routers = createBrowserRouter([
@@ -23,7 +24,11 @@ export default function AppRouters() {
         },
         {
           path: "/datasets",
-          element: <DataSetView />,
+          element: <DatasetListView />,
+        },
+        {
+          path: "/datasets/detail/:id",
+          element: <DatasetDetailView />,
         },
         {
           path: "/sectorals",

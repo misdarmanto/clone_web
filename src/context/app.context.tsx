@@ -14,7 +14,7 @@ export interface AppContextTypes {
   setAppAlert: (value: IAppAlertTypes) => void;
 }
 
-export enum AppAction {
+enum AppAction {
   IS_LOADING = "IS_LOADING",
   APP_ALERT = "APP_ALERT",
 }

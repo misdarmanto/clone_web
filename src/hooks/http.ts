@@ -1,6 +1,6 @@
 import { useAppContext, type AppContextTypes } from "../context/app.context";
 import { appConfigs } from "../configs/appConfigs";
-import { ServiceHttp } from "../services/api";
+import { HttpService } from "../services/api";
 
 interface PostRequest {
   path: string;
@@ -42,7 +42,7 @@ export interface HttpRequestMethods {
 
 export const useHttp = (): HttpRequestMethods => {
   const { setAppAlert }: AppContextTypes = useAppContext();
-  const serviceHttp = new ServiceHttp();
+  const httpService = new HttpService();
 
   const handleError = (error: unknown): string => {
     if (error instanceof Error) {
@@ -75,7 +75,7 @@ export const useHttp = (): HttpRequestMethods => {
 
   const handleGetRequest = async ({ path }: GetRequest): Promise<unknown> => {
     try {
-      return await serviceHttp.get({ path });
+      return await httpService.get({ path });
     } catch (error) {
       const errorMessage = handleError(error);
       console.error(errorMessage);
@@ -88,7 +88,7 @@ export const useHttp = (): HttpRequestMethods => {
     body,
   }: PostRequest): Promise<unknown> => {
     try {
-      const result = await serviceHttp.post({ path, body });
+      const result = await httpService.post({ path, body });
       showSuccessAlert("Berhasil dibuat");
       return result;
     } catch (error) {
@@ -102,7 +102,7 @@ export const useHttp = (): HttpRequestMethods => {
     path,
   }: DeleteRequest): Promise<unknown> => {
     try {
-      const result = await serviceHttp.remove({ path });
+      const result = await httpService.remove({ path });
       setAppAlert({
         isDisplayAlert: true,
         message: "Berhasil dihapus",
@@ -121,7 +121,7 @@ export const useHttp = (): HttpRequestMethods => {
     body,
   }: UpdateRequest): Promise<unknown> => {
     try {
-      const result = await serviceHttp.patch({ path, body });
+      const result = await httpService.patch({ path, body });
       showSuccessAlert("Berhasil diperbarui");
       return result;
     } catch (error) {
@@ -138,8 +138,8 @@ export const useHttp = (): HttpRequestMethods => {
     filter,
   }: GetTableDataRequest): Promise<unknown> => {
     try {
-      return await serviceHttp.getTableData({
-        url: `${appConfigs.baseUrl}${path}`,
+      return await httpService.getTableData({
+        url: `${appConfigs.apiUrl}${path}`,
         pagination: true,
         page,
         size,
