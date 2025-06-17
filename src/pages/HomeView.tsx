@@ -2,9 +2,27 @@ import heroImage from "../assets/hero.webp";
 import cardImage from "../assets/card-image.webp";
 import whyMeImage from "../assets/whyme.webp";
 import Button from "../components/buttons/Button";
-import Card from "../components/card/Card";
+import { WavesIcon } from "lucide-react";
 
 export default function HomeView() {
+  const cardData = [
+    {
+      title: "Dataset",
+      desc: "Kumpulan data yang diatur dalam format terstruktur dan tersedia di Portal Satu Data Indonesia.",
+      count: 228,
+    },
+    {
+      title: "Statistik Sektoral",
+      desc: "Data statistik yang digunakan untuk memenuhi kebutuhan instansi pemerintah tertentu.",
+      count: 1332,
+    },
+    {
+      title: "Urusan",
+      desc: "Kebijakan tata kelola data pemerintah yang bertujuan untuk menghasilkan data berkualitas dan mudah diakses.",
+      count: 50,
+    },
+  ];
+
   return (
     <div>
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto px-4 py-8 md:py-12">
@@ -39,26 +57,12 @@ export default function HomeView() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 pb-20 grid grid-cols-1 md:grid-cols-3 gap-6">
-        {[
-          {
-            title: "Dataset",
-            desc: "Kumpulan data yang diatur dalam format terstruktur dan tersedia di Portal Satu Data Indonesia.",
-            count: 228,
-          },
-          {
-            title: "Statistik Sektoral",
-            desc: "Data statistik yang digunakan untuk memenuhi kebutuhan instansi pemerintah tertentu.",
-            count: 1332,
-          },
-          {
-            title: "Urusan",
-            desc: "Kebijakan tata kelola data pemerintah yang bertujuan untuk menghasilkan data berkualitas dan mudah diakses.",
-            count: 50,
-          },
-        ].map((item, index) => (
-          <Card
-            key={index}
-            header={
+        {cardData.map((item, index) => (
+          <div
+            key={`_${index}`}
+            className={`bg-white shadow-md p-3 w-full flex flex-col gap-2`}
+          >
+            <div className="flex justify-center">
               <div>
                 <div className="flex justify-center mb-4 rounded-xl">
                   <img src={cardImage} alt="card image" loading="lazy" />
@@ -67,9 +71,11 @@ export default function HomeView() {
                   {item.title}
                 </h3>
               </div>
-            }
-            body={<p className="text-sm text-gray-600 mb-4">{item.desc}</p>}
-            footer={
+            </div>
+            <div className="flex flex-col text-center gap-2">
+              <p className="text-sm text-gray-600 mb-4">{item.desc}</p>
+            </div>
+            <div className="mt-auto">
               <div className="flex justify-between items-center">
                 <span className="text-xl font-bold">
                   {item.count.toLocaleString()}
@@ -78,8 +84,8 @@ export default function HomeView() {
                   Lihat Data →
                 </button>
               </div>
-            }
-          />
+            </div>
+          </div>
         ))}
       </div>
 
@@ -104,6 +110,42 @@ export default function HomeView() {
             loading="lazy"
           />
         </div>
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[
+          {
+            id: 0,
+            title: "Menemukan Data Dengan Mudah",
+            description:
+              "Cari data dari Pemerintah Lampung timur dalam beberapa klik saja",
+          },
+          {
+            id: 1,
+            title: "Mendapatkan Data Dengan Cepat",
+            description:
+              "Nikmati proses akses data tanpa proses birokrasi panjang.",
+          },
+          {
+            id: 2,
+            title: "Data Akurat dan Muatkhir",
+            description:
+              "Dapatkan data lengkap dan terkini resmi dari Organisasi Perangkat Daerah terkait.",
+          },
+        ].map((item) => (
+          <div
+            key={`_${item.id}`}
+            className={`bg-white shadow-md p-3 w-full flex flex-col gap-2`}
+          >
+            <div>
+              <WavesIcon className="mb-2" />
+              <h3 className="text-h2 text-gray-800 mb-2">{item.title}</h3>
+            </div>
+            <div className="flex flex-colgap-2">
+              <p className="text-sm text-gray-600 mb-4">{item.description}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
