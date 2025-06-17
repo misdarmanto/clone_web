@@ -1,22 +1,25 @@
-import { InputField } from "../components/input/InputField";
-import emptyIcon from "../assets/empty.webp";
-import Pagination from "../components/pagination/Pagination";
+import { InputField } from "../../components/input/InputField";
+import emptyIcon from "../../assets/empty.webp";
+import Pagination from "../../components/pagination/Pagination";
 import { CalendarDays, Clock, Building2 } from "lucide-react";
-import folderIcon from "../assets/folder.webp";
+import folderIcon from "../../assets/folder.webp";
+import { useNavigate } from "react-router-dom";
 
-export default function DataSetView() {
-  const dataSetProdusen = [
-    "Kecamatan Purbolinggo",
-    "Puskesmas Trimulyo",
-    "Puskesmas Adirejo",
-    "Kecamatan Marga Tiga",
-    "Badan Pendapatan Daerah",
-    "Puskesmas Jabung",
-    "Puskesmas Labuhan Maringgai",
-    "Puskesmas Raman Utara",
-  ];
+const dataSetProdusen = [
+  "Kecamatan Purbolinggo",
+  "Puskesmas Trimulyo",
+  "Puskesmas Adirejo",
+  "Kecamatan Marga Tiga",
+  "Badan Pendapatan Daerah",
+  "Puskesmas Jabung",
+  "Puskesmas Labuhan Maringgai",
+  "Puskesmas Raman Utara",
+];
 
-  const dataSet = [1, 2, 3];
+const dataSet = [1, 2, 3];
+
+export default function DataSetListView() {
+  const navigation = useNavigate();
 
   return (
     <div className="min-h-screen">
@@ -87,7 +90,8 @@ export default function DataSetView() {
               {dataSet.map((_) => (
                 <div
                   key={_}
-                  className="border border-gray-300 rounded-md shadow p-4 flex flex-col gap-2 w-full"
+                  onClick={() => navigation(`detail/${_}`)}
+                  className="border cursor-pointer border-gray-300 rounded-md shadow p-4 flex flex-col gap-2 w-full"
                 >
                   <div className="flex items-center gap-3">
                     <img
