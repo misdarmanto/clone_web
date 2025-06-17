@@ -2,6 +2,7 @@ import { useState } from "react";
 import Pagination from "../components/pagination/Pagination";
 import type { TableColumn } from "../components/table/Table";
 import Table from "../components/table/Table";
+import { Link } from "react-router-dom";
 
 export default function PublicationView() {
   interface TableData {
@@ -49,7 +50,15 @@ export default function PublicationView() {
     { key: "PerangkatDaerah", title: "Perangkat Daerah" },
     { key: "tahun", title: "Tahun" },
     { key: "dibuatPada", title: "Dibuat Pada" },
-    { key: "aksi", title: "Aksi" },
+    {
+      key: "aksi",
+      title: "Aksi",
+      render: (row) => (
+        <Link to={`/detail/${row}`}>
+          <strong>Lihat</strong>
+        </Link>
+      ),
+    },
   ];
 
   const itemsPerPage = 5;

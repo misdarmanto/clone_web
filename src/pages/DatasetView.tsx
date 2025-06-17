@@ -68,9 +68,9 @@ export default function DataSetView() {
               fullWidth
               className="mb-2"
             />
-            <div className="flex items-center justify-between gap-4 flex-wrap">
-              <p className="text-sm text-gray-500 mb-6">
-                228 Dataset Ditemukan
+            <div className="flex items-center justify-between gap-4 mb-2 flex-wrap">
+              <p className="text-sm text-gray-500">
+                {dataSet.length || 0} Dataset Ditemukan
               </p>
 
               <div className="flex items-center justify-between">
