@@ -12,6 +12,8 @@ interface InputFieldProps {
   className?: string;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  value?: string | number;
 }
 
 export const InputField: React.FC<InputFieldProps> = ({
@@ -19,11 +21,13 @@ export const InputField: React.FC<InputFieldProps> = ({
   placeholder,
   type = "text",
   error,
-  registration = {},
+  registration,
   fullWidth = false,
   className = "",
   startIcon,
   endIcon,
+  onChange,
+  value,
 }) => {
   return (
     <div className={clsx("flex flex-col gap-1", fullWidth && "w-full")}>
@@ -48,6 +52,8 @@ export const InputField: React.FC<InputFieldProps> = ({
             className
           )}
           {...registration}
+          onChange={registration?.onChange ?? onChange}
+          value={value}
         />
         {endIcon && (
           <div className="absolute inset-y-0 right-0 flex items-center pr-3">

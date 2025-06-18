@@ -10,7 +10,7 @@ export default function PublicationView() {
   const [publicationList, setPublicationList] = useState<IPublication[]>();
   const [loading, setLoading] = useState(false);
 
-  const handleGetDetailPublication = async () => {
+  const handleGetPublication = async () => {
     try {
       setLoading(true);
       const result = (await handleGetRequest({
@@ -25,7 +25,7 @@ export default function PublicationView() {
   };
 
   useEffect(() => {
-    handleGetDetailPublication();
+    handleGetPublication();
   }, []);
 
   const columns: TableColumn<IPublication>[] = [
@@ -35,7 +35,7 @@ export default function PublicationView() {
       title: "Judul Publikasi",
       render: (row) => (
         <Link to={`/detail/${row}`}>
-          <strong>Lihat</strong>
+          <strong className="text-blue-500">{row}</strong>
         </Link>
       ),
     },

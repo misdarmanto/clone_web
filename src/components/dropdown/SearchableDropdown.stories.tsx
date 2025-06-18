@@ -25,7 +25,7 @@ const opdOptions = [
 export const Default: Story = {
   args: {
     options: opdOptions,
-    onSelect: (value) => console.log("Selected:", value),
+    onChange: (value) => console.log("Selected:", value),
     placeholder: "Pilih OPD",
   },
 };

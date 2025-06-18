@@ -4,7 +4,7 @@ import Pagination from "../components/pagination/Pagination";
 import type { TableColumn } from "../components/table/Table";
 import Table from "../components/table/Table";
 import { InputField } from "../components/input/InputField";
-import SearchableDropdown from "../components/dropdown/SearchableDropdown";
+import DropdownSearch from "../components/dropdown/SearchableDropdown";
 
 export default function UrusanView() {
   interface TableData {
@@ -108,10 +108,7 @@ export default function UrusanView() {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div className="col-span-2">
             <label className="block font-medium mb-1">Perangkat Daerah</label>
-            <SearchableDropdown
-              options={opdList}
-              onSelect={(val) => console.log("Selected:", val)}
-            />
+            <DropdownSearch options={opdList} onChange={console.log} />
           </div>
 
           <InputField
