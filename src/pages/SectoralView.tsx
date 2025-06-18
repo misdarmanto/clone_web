@@ -4,34 +4,11 @@ import Table, { type TableColumn } from "../components/table/Table";
 import { InputField } from "../components/input/InputField";
 import SearchableDropdown from "../components/dropdown/SearchableDropdown";
 import { useHttp } from "../hooks/http";
-
-// ====== Types ======
-interface SectoralData {
-  nama_opd: string;
-  uraian_dssd: string;
-  jumlah: number;
-  satuan: string;
-  jenis: number;
-  kategori: number;
-  jenis_string: string;
-  kategori_string: string;
-}
-
-interface SectoralStats {
-  data_sektoral: number;
-  dataset: number;
-  urusan: number;
-}
-
-interface SectoralResponse {
-  data_sektoral: SectoralData[];
-  total: SectoralStats;
-}
-
-interface DropdownOption {
-  label: string;
-  value: string;
-}
+import type {
+  IDropdownOption,
+  ISectoralResponse,
+} from "../types/sectoral.interface";
+import DropdownSearch from "../components/dropdown/SearchableDropdown";
 
 interface TableData {
   no: number;
@@ -63,33 +40,6 @@ const DUMMY_TABLE_DATA: TableData[] = [
     "2023": 0,
     "2024": 0,
   },
-  {
-    no: 3,
-    kodeDssd: "1.04.000003",
-    uraiDssd: "Anggota Tim Satgas",
-    satuan: "Orang",
-    "2022": 0,
-    "2023": 0,
-    "2024": 0,
-  },
-  {
-    no: 4,
-    kodeDssd: "2.11.000001",
-    uraiDssd: "Audit lingkungan hidup yang diterbitkan oleh kab/kota pada n-1",
-    satuan: "Laporan",
-    "2022": 0,
-    "2023": 0,
-    "2024": 0,
-  },
-  {
-    no: 5,
-    kodeDssd: "1.04.000004",
-    uraiDssd: "Backlog Kepemilikan Rumah",
-    satuan: "Unit Rumah",
-    "2022": 0,
-    "2023": 0,
-    "2024": 0,
-  },
 ];
 
 // ====== Columns ======
@@ -105,7 +55,7 @@ const TABLE_COLUMNS: TableColumn<TableData>[] = [
 
 export default function SectoralView() {
   const { handleGetRequest } = useHttp();
-  const [dropdownOptions, setDropdownOptions] = useState<DropdownOption[]>([]);
+  const [dropdownOptions, setDropdownOptions] = useState<IDropdownOption[]>([]);
   const [loading, setLoading] = useState(false);
 
   const fetchDropdownOptions = useCallback(async () => {
@@ -113,7 +63,7 @@ export default function SectoralView() {
       setLoading(true);
       const response = (await handleGetRequest({
         path: "/data-sektoral/beranda",
-      })) as SectoralResponse;
+      })) as ISectoralResponse;
 
       if (response?.data_sektoral) {
         const formattedOptions = response.data_sektoral.map((item) => ({
@@ -143,9 +93,9 @@ export default function SectoralView() {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div className="col-span-2">
             <label className="block font-medium mb-1">Perangkat Daerah</label>
-            <SearchableDropdown
+            <DropdownSearch
               options={dropdownOptions}
-              onSelect={(val) => console.log("Selected:", val)}
+              onChange={(val) => console.log("Selected:", val)}
             />
           </div>
 

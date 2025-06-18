@@ -1,69 +1,93 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
-interface Option {
+export interface DropdownSearchOption {
   label: string;
   value: string;
 }
 
-interface SearchableDropdownProps {
-  options: Option[];
-  onSelect: (value: Option) => void;
+interface DropdownSearchProps {
+  options: DropdownSearchOption[];
+  label?: string;
+  value?: string;
+  onChange: (value: string) => void;
   placeholder?: string;
 }
 
-const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
+const DropdownSearch: React.FC<DropdownSearchProps> = ({
   options,
-  onSelect,
-  placeholder = "Pilih Item",
+  label,
+  value,
+  onChange,
+  placeholder = "Pilih opsi...",
 }) => {
-  const [search, setSearch] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [filtered, setFiltered] = useState<Option[]>(options);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleSearch = (value: string) => {
-    setSearch(value);
-    setFiltered(
-      options.filter((opt) =>
-        opt.label.toLowerCase().includes(value.toLowerCase())
-      )
-    );
-  };
+  const filteredOptions = options.filter((option) =>
+    option.label.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  const handleSelect = (option: Option) => {
-    setSearch(option.label);
-    onSelect(option);
-    setIsOpen(false);
-  };
+  const selectedLabel = options.find((opt) => opt.value === value)?.label ?? "";
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
-    <div className="relative w-full max-w-md">
-      <input
-        type="text"
-        placeholder={placeholder}
-        value={search}
-        onChange={(e) => handleSearch(e.target.value)}
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
-      />
+    <div ref={dropdownRef} className="relative w-full">
+      {label && <label className="block font-medium mb-1">{label}</label>}
+      <div
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="w-full border border-gray-300 rounded px-3 py-2.5 bg-white text-sm cursor-pointer"
+      >
+        {selectedLabel || placeholder}
+      </div>
+
       {isOpen && (
-        <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-md mt-1 max-h-60 overflow-y-auto shadow">
-          {filtered.length > 0 ? (
-            filtered.map((opt, index) => (
-              <li
-                key={`${index}-${opt.value}`}
-                onClick={() => handleSelect(opt)}
-                className="p-2 hover:bg-gray-200 cursor-pointer"
-              >
-                {opt.label}
+        <div className="absolute z-10 mt-1 w-full border border-gray-300 bg-white rounded shadow-md">
+          <input
+            type="text"
+            className="w-full px-3 py-2 border-b border-gray-200 text-sm focus:outline-none"
+            placeholder="Cari..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            autoFocus
+          />
+          <ul className="max-h-48 overflow-y-auto">
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map((option) => (
+                <li
+                  key={option.value}
+                  onClick={() => {
+                    onChange(option.value);
+                    setIsOpen(false);
+                    setSearchTerm("");
+                  }}
+                  className="px-3 py-2 hover:bg-orange-100 text-sm cursor-pointer"
+                >
+                  {option.label}
+                </li>
+              ))
+            ) : (
+              <li className="px-3 py-2 text-sm text-gray-400">
+                Tidak ditemukan
               </li>
-            ))
-          ) : (
-            <li className="p-2 text-gray-500">Tidak ada hasil</li>
-          )}
-        </ul>
+            )}
+          </ul>
+        </div>
       )}
     </div>
   );
 };
 
-export default SearchableDropdown;
+export default DropdownSearch;
