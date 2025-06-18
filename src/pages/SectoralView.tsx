@@ -42,7 +42,6 @@ export default function SectoralView() {
   const [filterByFirstYear, setFilterByFirstYear] = useState(2022);
   const [filterByEndYear, setFilterByEndYear] = useState(2024);
 
-  // Fetch Dropdown Options
   const fetchDropdownOptions = useCallback(async () => {
     try {
       setLoading(true);
@@ -64,7 +63,6 @@ export default function SectoralView() {
     }
   }, [handleGetRequest]);
 
-  // Fetch Table Data
   const fetchTableData = useCallback(async () => {
     try {
       setLoading(true);
