@@ -1,12 +1,73 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../components/buttons/Button";
 import Pagination from "../components/pagination/Pagination";
 import type { TableColumn } from "../components/table/Table";
 import Table from "../components/table/Table";
 import { InputField } from "../components/input/InputField";
 import SearchableDropdown from "../components/dropdown/SearchableDropdown";
+import { useHttp } from "../hooks/http";
+
+interface IDataSectoral {
+  nama_opd: string;
+  uraian_dssd: string;
+  jumlah: number;
+  satuan: string;
+  jenis: number;
+  kategori: number;
+  jenis_string: string;
+  kategori_string: string;
+}
+
+interface ITotal {
+  data_sektoral: number;
+  dataset: number;
+  urusan: number;
+}
+
+interface IDataSectoralResponse {
+  data_sektoral: IDataSectoral[];
+  total: ITotal;
+}
+
+interface IDataSectoralDropDownList {
+  label: string;
+  value: string;
+}
 
 export default function SectoralView() {
+  const { handleGetRequest } = useHttp();
+  const [listDropDownSectoral, setListDropDownSectoral] = useState<
+    IDataSectoralDropDownList[]
+  >([]);
+
+  const [loading, setLoading] = useState(false);
+
+  const handleGetDropDownSectoral = async () => {
+    try {
+      setLoading(true);
+
+      const result = (await handleGetRequest({
+        path: "/data-sektoral/beranda",
+      })) as IDataSectoralResponse;
+
+      if (result) {
+        const filtered = result.data_sektoral.map((item) => {
+          return { label: item.nama_opd, value: item.uraian_dssd };
+        }) as IDataSectoralDropDownList[];
+
+        setListDropDownSectoral(filtered);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    handleGetDropDownSectoral();
+  }, []);
+
   interface TableData {
     no: number;
     kodeDssd: string;
@@ -76,29 +137,6 @@ export default function SectoralView() {
     { key: "2024", title: "2024" },
   ];
 
-  const opdList = [
-    { value: "pendidikan", label: "Dinas Pendidikan dan Kebudayaan" },
-    {
-      value: "lingkungan",
-      label:
-        "Dinas Lingkungan Hidup, Perumahan, Kawasan Permukiman, dan Pertanahan",
-    },
-    {
-      value: "pu",
-      label: "Dinas Pekerjaan Umum dan Penataan Ruang",
-    },
-    { value: "kesehatan", label: "Dinas Kesehatan" },
-    { value: "perhubungan", label: "Dinas Perhubungan" },
-    { value: "polpp", label: "Satuan Polisi Pamong Praja" },
-  ];
-
-  const itemsPerPage = 4;
-  const [currentPage, setCurrentPage] = useState(0);
-
-  const totalPages = Math.ceil(allData.length / itemsPerPage);
-  const startIndex = currentPage * itemsPerPage;
-  const paginatedData = allData.slice(startIndex, startIndex + itemsPerPage);
-
   return (
     <div>
       <h2 className="text-h2 text-orange-300 mb-4">
@@ -109,7 +147,7 @@ export default function SectoralView() {
           <div className="col-span-2">
             <label className="block font-medium mb-1">Perangkat Daerah</label>
             <SearchableDropdown
-              options={opdList}
+              options={listDropDownSectoral}
               onSelect={(val) => console.log("Selected:", val)}
             />
           </div>
@@ -131,15 +169,15 @@ export default function SectoralView() {
       </div>
 
       <div className="p-5 border border-gray-300 border-1 rounded-md">
-        <Table data={paginatedData} columns={columns} loading={false} />
-        <Pagination
+        <Table data={allData} columns={columns} loading={loading} />
+        {/* <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
           onPrev={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
           onNext={() =>
             setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))
           }
-        />
+        /> */}
       </div>
     </div>
   );

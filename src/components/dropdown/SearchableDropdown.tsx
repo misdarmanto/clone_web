@@ -14,7 +14,7 @@ interface SearchableDropdownProps {
 const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
   options,
   onSelect,
-  placeholder = "Pilih OPD",
+  placeholder = "Pilih Item",
 }) => {
   const [search, setSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -48,9 +48,9 @@ const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
       {isOpen && (
         <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-md mt-1 max-h-60 overflow-y-auto shadow">
           {filtered.length > 0 ? (
-            filtered.map((opt) => (
+            filtered.map((opt, index) => (
               <li
-                key={opt.value}
+                key={`${index}-${opt.value}`}
                 onClick={() => handleSelect(opt)}
                 className="p-2 hover:bg-gray-200 cursor-pointer"
               >
