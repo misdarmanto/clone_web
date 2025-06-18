@@ -65,9 +65,9 @@ const DropdownSearch: React.FC<DropdownSearchProps> = ({
           />
           <ul className="max-h-48 overflow-y-auto">
             {filteredOptions.length > 0 ? (
-              filteredOptions.map((option) => (
+              filteredOptions.map((option, index) => (
                 <li
-                  key={option.value}
+                  key={`${index}-${option.value}`}
                   onClick={() => {
                     onChange(option.value);
                     setIsOpen(false);

@@ -5,12 +5,13 @@ import { InputField } from "../components/input/InputField";
 import SearchableDropdown from "../components/dropdown/SearchableDropdown";
 import { useHttp } from "../hooks/http";
 import type {
+  IDataSectoralListByOpd,
   IDropdownOption,
-  ISectoralResponse,
+  ISectoralDataBerandaResponse,
 } from "../types/sectoral.interface";
 import DropdownSearch from "../components/dropdown/SearchableDropdown";
 
-interface TableData {
+interface ITableData {
   no: number;
   kodeDssd: string;
   uraiDssd: string;
@@ -21,7 +22,7 @@ interface TableData {
 }
 
 // ====== Dummy Table Data ======
-const DUMMY_TABLE_DATA: TableData[] = [
+const DUMMY_TABLE_DATA: ITableData[] = [
   {
     no: 1,
     kodeDssd: "1.04.000001",
@@ -43,7 +44,7 @@ const DUMMY_TABLE_DATA: TableData[] = [
 ];
 
 // ====== Columns ======
-const TABLE_COLUMNS: TableColumn<TableData>[] = [
+const TABLE_COLUMNS: TableColumn<ITableData>[] = [
   { key: "no", title: "No" },
   { key: "kodeDssd", title: "Kode DSSD" },
   { key: "uraiDssd", title: "Uraian DSSD" },
@@ -56,14 +57,52 @@ const TABLE_COLUMNS: TableColumn<TableData>[] = [
 export default function SectoralView() {
   const { handleGetRequest } = useHttp();
   const [dropdownOptions, setDropdownOptions] = useState<IDropdownOption[]>([]);
+  const [dropdownSelected, setDropdownSelected] = useState("");
   const [loading, setLoading] = useState(false);
+  const [tableData, setTableData] = useState<ITableData[]>([]);
+
+  const fetchTableData = async () => {
+    try {
+      setLoading(true);
+      const response = (await handleGetRequest({
+        path: "/data-sektoral/list-by-opd?id_user_opd=3&dari_tahun=2000&sampai_tahun=2025'",
+      })) as IDataSectoralListByOpd[];
+
+      console.log(response);
+      if (response) {
+        const formattedTableData: ITableData[] = response.map((item) => ({
+          no: item.id,
+          kodeDssd: item.kode_dssd,
+          uraiDssd: item.uraian_dssd,
+          satuan: item.satuan,
+          "2022":
+            (Array.isArray(item.input) &&
+              item.input.find((value) => value.tahun === 2022)?.jumlah) ||
+            0,
+          "2023":
+            (Array.isArray(item.input) &&
+              item.input.find((value) => value.tahun === 2023)?.jumlah) ||
+            0,
+          "2024":
+            (Array.isArray(item.input) &&
+              item.input.find((value) => value.tahun === 2024)?.jumlah) ||
+            0,
+        }));
+        setTableData(formattedTableData);
+      }
+    } catch (error) {
+      console.error("Failed to fetch dropdown:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchDropdownOptions = useCallback(async () => {
     try {
       setLoading(true);
       const response = (await handleGetRequest({
         path: "/data-sektoral/beranda",
-      })) as ISectoralResponse;
+      })) as ISectoralDataBerandaResponse;
 
       if (response?.data_sektoral) {
         const formattedOptions = response.data_sektoral.map((item) => ({
@@ -80,6 +119,7 @@ export default function SectoralView() {
   }, [handleGetRequest]);
 
   useEffect(() => {
+    fetchTableData();
     fetchDropdownOptions();
   }, []);
 
@@ -95,7 +135,8 @@ export default function SectoralView() {
             <label className="block font-medium mb-1">Perangkat Daerah</label>
             <DropdownSearch
               options={dropdownOptions}
-              onChange={(val) => console.log("Selected:", val)}
+              value={dropdownSelected}
+              onChange={(val) => setDropdownSelected(val)}
             />
           </div>
 
@@ -117,11 +158,7 @@ export default function SectoralView() {
       </div>
 
       <div className="p-5 border border-gray-300 rounded-md">
-        <Table
-          data={DUMMY_TABLE_DATA}
-          columns={TABLE_COLUMNS}
-          loading={loading}
-        />
+        <Table data={tableData} columns={TABLE_COLUMNS} loading={loading} />
       </div>
     </div>
   );
