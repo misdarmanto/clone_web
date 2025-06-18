@@ -108,10 +108,7 @@ export default function UrusanView() {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div className="col-span-2">
             <label className="block font-medium mb-1">Perangkat Daerah</label>
-            <DropdownSearch
-              options={opdList}
-              onChange={(val) => console.log("Selected:", val)}
-            />
+            <DropdownSearch options={opdList} onChange={console.log} />
           </div>
 
           <InputField
