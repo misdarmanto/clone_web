@@ -9,6 +9,7 @@ import type {
   IDropdownOption,
   ISectoralDataBerandaResponse,
 } from "../types/sectoral.interface";
+import type { IOpd } from "../types/opd.interface";
 
 // ========== Types ==========
 interface ITableData {
@@ -46,13 +47,13 @@ export default function SectoralView() {
     try {
       setLoading(true);
       const response = (await handleGetRequest({
-        path: "/data-sektoral/beranda",
-      })) as ISectoralDataBerandaResponse;
+        path: "/list-opd",
+      })) as IOpd[];
 
-      if (response?.data_sektoral) {
-        const options = response.data_sektoral.map((item) => ({
+      if (response && Array.isArray(response)) {
+        const options = response.map((item) => ({
           label: item.nama_opd,
-          value: item.uraian_dssd,
+          value: item.id_opd.toString(),
         }));
         setDropdownOptions(options);
       }
