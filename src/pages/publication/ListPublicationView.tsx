@@ -33,11 +33,15 @@ export default function ListPublicationView() {
     {
       key: "buku",
       title: "Judul Publikasi",
-      render: (row) => (
-        <Link to={`/publication/detail/${row}`}>
-          <strong className="text-blue-500">{row}</strong>
-        </Link>
-      ),
+      render: (row) => {
+        console.log("=====row");
+        console.log(row);
+        return (
+          <Link to={`/publications/detail/${row.buku_slug}`}>
+            <strong className="text-blue-500">{row.buku}</strong>
+          </Link>
+        );
+      },
     },
     { key: "nama_opd", title: "Perangkat Daerah" },
     { key: "tahun", title: "Tahun" },
