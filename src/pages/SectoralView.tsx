@@ -7,11 +7,9 @@ import { useHttp } from "../hooks/http";
 import type {
   IDataSectoralListByOpd,
   IDropdownOption,
-  ISectoralDataBerandaResponse,
 } from "../types/sectoral.interface";
 import type { IOpd } from "../types/opd.interface";
 
-// ========== Types ==========
 interface ITableData {
   no: number;
   kodeDssd: string;
@@ -22,7 +20,6 @@ interface ITableData {
   "2024": number;
 }
 
-// ========== Table Columns ==========
 const TABLE_COLUMNS: TableColumn<ITableData>[] = [
   { key: "no", title: "No" },
   { key: "kodeDssd", title: "Kode DSSD" },
