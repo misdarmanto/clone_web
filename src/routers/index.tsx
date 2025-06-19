@@ -48,7 +48,7 @@ export default function AppRouters() {
           element: <ListPublicationView />,
         },
         {
-          path: "/publications/detail/:publicationId",
+          path: "/publications/detail/:publicationSlug",
           element: <DetailPublicationView />,
         },
         {

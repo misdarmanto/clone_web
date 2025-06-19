@@ -34,8 +34,6 @@ export default function ListPublicationView() {
       key: "buku",
       title: "Judul Publikasi",
       render: (row) => {
-        console.log("=====row");
-        console.log(row);
         return (
           <Link to={`/publications/detail/${row.buku_slug}`}>
             <strong className="text-blue-500">{row.buku}</strong>
