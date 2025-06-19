@@ -18,7 +18,7 @@ const dataSetProdusen = [
 
 const dataSet = [1, 2, 3];
 
-export default function DataSetListView() {
+export default function ListDataSetView() {
   const navigation = useNavigate();
 
   return (

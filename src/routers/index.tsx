@@ -2,14 +2,15 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import HomeView from "../pages/HomeView";
 import NotfoundView from "../pages/404";
 import LayoutView from "../layouts/LayoutView";
-import DatasetListView from "../pages/dataset/DatasetListView";
 import SectoralView from "../pages/SectoralView";
 import UrusanView from "../pages/UrusanView";
 import OrganizationView from "../pages/OrganizationView";
-import PublicationView from "../pages/PublicationView";
 import ContactView from "../pages/ContactView";
 import LoginView from "../pages/LoginView";
-import DatasetDetailView from "../pages/dataset/DatasetDetailView";
+import ListPublicationView from "../pages/publication/ListPublicationView";
+import DetailPublicationView from "../pages/publication/DetailPublicationView";
+import ListDataSetView from "../pages/dataset/ListDatasetView";
+import DetailDatasetView from "../pages/dataset/DetailDatasetView";
 
 export default function AppRouters() {
   const routers = createBrowserRouter([
@@ -24,11 +25,11 @@ export default function AppRouters() {
         },
         {
           path: "/datasets",
-          element: <DatasetListView />,
+          element: <ListDataSetView />,
         },
         {
-          path: "/datasets/detail/:id",
-          element: <DatasetDetailView />,
+          path: "/datasets/detail/:datasetId",
+          element: <DetailDatasetView />,
         },
         {
           path: "/sectorals",
@@ -44,7 +45,11 @@ export default function AppRouters() {
         },
         {
           path: "/publications",
-          element: <PublicationView />,
+          element: <ListPublicationView />,
+        },
+        {
+          path: "/publications/detail/:publicationId",
+          element: <DetailPublicationView />,
         },
         {
           path: "/contacts",

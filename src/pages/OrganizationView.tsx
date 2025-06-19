@@ -15,25 +15,6 @@ const categories = [
   "Rumah",
 ];
 
-const orgData = [
-  {
-    count: 459,
-    name: "Dinas Pendidikan dan Kebudayaan",
-  },
-  {
-    count: 353,
-    name: "Dinas Lingkungan Hidup, Perumahan, Kawasan Permukiman, dan Pertanahan",
-  },
-  {
-    count: 265,
-    name: "Dinas Pekerjaan Umum dan Penataan Ruang",
-  },
-  {
-    count: 261,
-    name: "Dinas Kesehatan",
-  },
-];
-
 export default function OrganizationView() {
   const [activeCategory, setActiveCategory] = useState("Semua");
   const { handleGetRequest } = useHttp();
@@ -47,7 +28,6 @@ export default function OrganizationView() {
         path: "/list-opd",
       })) as IOrganization[];
 
-      console.log(response);
       if (response) {
         setOrganizationList(response);
       }
@@ -84,7 +64,6 @@ export default function OrganizationView() {
         ))}
       </div>
 
-      {/* Card Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {organizationList.map((org, index) => (
           <div
