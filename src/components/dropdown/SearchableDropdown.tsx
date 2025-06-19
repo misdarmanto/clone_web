@@ -8,8 +8,8 @@ export interface DropdownSearchOption {
 interface DropdownSearchProps {
   options: DropdownSearchOption[];
   label?: string;
-  value?: string;
-  onChange: (value: string | number) => void;
+  value?: string | number;
+  onChange: (value: string | number | any) => void;
   placeholder?: string;
 }
 

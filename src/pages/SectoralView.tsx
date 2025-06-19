@@ -37,11 +37,11 @@ export default function SectoralView() {
   const { handleGetRequest } = useHttp();
 
   const [dropdownOptions, setDropdownOptions] = useState<IDropdownOption[]>([]);
-  const [dropdownSelected, setDropdownSelected] = useState("");
+  const [dropdownSelected, setDropdownSelected] = useState<number>(1);
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState<ITableData[]>([]);
-  const [filterByFirstYear, setFilterByFirstYear] = useState(2022);
-  const [filterByEndYear, setFilterByEndYear] = useState(2024);
+  const [filterByFirstYear, setFilterByFirstYear] = useState(2021);
+  const [filterByEndYear, setFilterByEndYear] = useState(2025);
 
   const fetchDropdownOptions = useCallback(async () => {
     try {
@@ -53,7 +53,7 @@ export default function SectoralView() {
       if (response && Array.isArray(response)) {
         const options = response.map((item) => ({
           label: item.nama_opd,
-          value: item.id_opd.toString(),
+          value: item.id_opd,
         }));
         setDropdownOptions(options);
       }
@@ -68,7 +68,7 @@ export default function SectoralView() {
     try {
       setLoading(true);
       const response = (await handleGetRequest({
-        path: `/data-sektoral/list-by-opd?id_user_opd=3&dari_tahun=${filterByFirstYear}&sampai_tahun=${filterByEndYear}&uraian_dssd${dropdownSelected}`,
+        path: `/data-sektoral/list-by-opd?id_user_opd=${dropdownSelected}&dari_tahun=${filterByFirstYear}&sampai_tahun=${filterByEndYear}`,
       })) as IDataSectoralListByOpd[];
 
       if (response) {
