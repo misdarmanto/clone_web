@@ -2,14 +2,14 @@ import React, { useState, useRef, useEffect } from "react";
 
 export interface DropdownSearchOption {
   label: string;
-  value: string;
+  value: string | number;
 }
 
 interface DropdownSearchProps {
   options: DropdownSearchOption[];
   label?: string;
-  value?: string;
-  onChange: (value: string) => void;
+  value?: string | number;
+  onChange: (value: string | number | any) => void;
   placeholder?: string;
 }
 

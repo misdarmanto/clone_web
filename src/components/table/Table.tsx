@@ -4,7 +4,7 @@ import clsx from "clsx";
 export interface TableColumn<T> {
   key: keyof T;
   title: React.ReactNode | string;
-  render?: (value: T[keyof T]) => React.ReactNode;
+  render?: (item: T) => React.ReactNode;
 }
 
 interface TableProps<T> {
@@ -61,16 +61,18 @@ const Table = <T extends object>({
         <tbody>
           {data.map((item, index) => (
             <tr key={`tr-${String(item[columns[0].key])}-${index}`}>
-              {columns.map((column) => (
-                <td
-                  key={`td-${String(column.key)}`}
-                  className="px-6 py-3 text-p"
-                >
-                  {column.render
-                    ? column.render(item[column.key])
-                    : String(item[column.key])}
-                </td>
-              ))}
+              {columns.map((column) => {
+                return (
+                  <td
+                    key={`td-${String(column.key)}`}
+                    className="px-6 py-3 text-p"
+                  >
+                    {column.render
+                      ? column.render(item)
+                      : String(item[column.key])}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>

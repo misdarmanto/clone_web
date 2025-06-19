@@ -34,10 +34,10 @@ const sampleColumns: TableColumn<DataType>[] = [
     render: (value) => (
       <span
         className={`text-sm font-medium ${
-          value === "Active" ? "text-green-600" : "text-red-600"
+          value.status === "Active" ? "text-green-600" : "text-red-600"
         }`}
       >
-        {value}
+        {value.status}
       </span>
     ),
   },

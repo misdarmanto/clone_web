@@ -1,4 +1,4 @@
-export default function DatasetDetailView() {
+export default function DetailDatasetView() {
   const data = [
     { label: "Nama OPD", value: "Dinas Perindustrian dan Perdagangan" },
     {

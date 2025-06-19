@@ -7,10 +7,9 @@ import { useHttp } from "../hooks/http";
 import type {
   IDataSectoralListByOpd,
   IDropdownOption,
-  ISectoralDataBerandaResponse,
 } from "../types/sectoral.interface";
+import type { IOpd } from "../types/opd.interface";
 
-// ========== Types ==========
 interface ITableData {
   no: number;
   kodeDssd: string;
@@ -21,7 +20,6 @@ interface ITableData {
   "2024": number;
 }
 
-// ========== Table Columns ==========
 const TABLE_COLUMNS: TableColumn<ITableData>[] = [
   { key: "no", title: "No" },
   { key: "kodeDssd", title: "Kode DSSD" },
@@ -36,23 +34,23 @@ export default function SectoralView() {
   const { handleGetRequest } = useHttp();
 
   const [dropdownOptions, setDropdownOptions] = useState<IDropdownOption[]>([]);
-  const [dropdownSelected, setDropdownSelected] = useState("");
+  const [dropdownSelected, setDropdownSelected] = useState<number>(1);
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState<ITableData[]>([]);
-  const [filterByFirstYear, setFilterByFirstYear] = useState(2022);
-  const [filterByEndYear, setFilterByEndYear] = useState(2024);
+  const [filterByFirstYear, setFilterByFirstYear] = useState(2021);
+  const [filterByEndYear, setFilterByEndYear] = useState(2025);
 
   const fetchDropdownOptions = useCallback(async () => {
     try {
       setLoading(true);
       const response = (await handleGetRequest({
-        path: "/data-sektoral/beranda",
-      })) as ISectoralDataBerandaResponse;
+        path: "/list-opd",
+      })) as IOpd[];
 
-      if (response?.data_sektoral) {
-        const options = response.data_sektoral.map((item) => ({
+      if (response && Array.isArray(response)) {
+        const options = response.map((item) => ({
           label: item.nama_opd,
-          value: item.uraian_dssd,
+          value: item.id_opd,
         }));
         setDropdownOptions(options);
       }
@@ -67,7 +65,7 @@ export default function SectoralView() {
     try {
       setLoading(true);
       const response = (await handleGetRequest({
-        path: `/data-sektoral/list-by-opd?id_user_opd=3&dari_tahun=${filterByFirstYear}&sampai_tahun=${filterByEndYear}&uraian_dssd${dropdownSelected}`,
+        path: `/data-sektoral/list-by-opd?id_user_opd=${dropdownSelected}&dari_tahun=${filterByFirstYear}&sampai_tahun=${filterByEndYear}`,
       })) as IDataSectoralListByOpd[];
 
       if (response) {

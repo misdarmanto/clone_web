@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import organizationImage from "../assets/oragnization.webp";
+import { useHttp } from "../hooks/http";
+import type { IOrganization } from "../types/organization.interface";
 
 const categories = [
   "Semua",
@@ -13,33 +15,39 @@ const categories = [
   "Rumah",
 ];
 
-const orgData = [
-  {
-    count: 459,
-    name: "Dinas Pendidikan dan Kebudayaan",
-  },
-  {
-    count: 353,
-    name: "Dinas Lingkungan Hidup, Perumahan, Kawasan Permukiman, dan Pertanahan",
-  },
-  {
-    count: 265,
-    name: "Dinas Pekerjaan Umum dan Penataan Ruang",
-  },
-  {
-    count: 261,
-    name: "Dinas Kesehatan",
-  },
-];
-
 export default function OrganizationView() {
   const [activeCategory, setActiveCategory] = useState("Semua");
+  const { handleGetRequest } = useHttp();
+  const [loading, setLoading] = useState(false);
+  const [organizationList, setOrganizationList] = useState<IOrganization[]>([]);
+
+  const fetchOrganizationList = async () => {
+    try {
+      setLoading(true);
+      const response = (await handleGetRequest({
+        path: "/list-opd",
+      })) as IOrganization[];
+
+      if (response) {
+        setOrganizationList(response);
+      }
+    } catch (err) {
+      console.error("Dropdown fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrganizationList();
+  }, []);
+
+  if (loading) return <div>...loading</div>;
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
       <h2 className="text-h2 text-orange-400 font-bold mb-6">Organisasi</h2>
 
-      {/* Category Filter Buttons */}
       <div className="flex flex-wrap gap-2 mb-8">
         {categories.map((cat) => (
           <button
@@ -56,9 +64,8 @@ export default function OrganizationView() {
         ))}
       </div>
 
-      {/* Card Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {orgData.map((org, index) => (
+        {organizationList.map((org, index) => (
           <div
             key={index}
             className="bg-white rounded shadow p-6 text-center hover:shadow-lg transition"
@@ -70,10 +77,10 @@ export default function OrganizationView() {
               className="mx-auto mb-4 h-20"
             />
             <p className="text-xl font-bold text-orange-500 mb-1">
-              {org.count}
+              {org.total_ref_sektoral}
             </p>
             <p className="font-semibold text-gray-700 mb-2">Data Sektoral</p>
-            <p className="text-sm text-gray-500">{org.name}</p>
+            <p className="text-sm text-gray-500">{org.nama_opd}</p>
           </div>
         ))}
       </div>

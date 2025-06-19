@@ -22,7 +22,7 @@ export interface ISectoralDataBerandaResponse {
 
 export interface IDropdownOption {
   label: string;
-  value: string;
+  value: string | number;
 }
 
 export interface IDataSectoralListByOpdInput {

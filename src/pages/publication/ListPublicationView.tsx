@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import type { TableColumn } from "../components/table/Table";
-import Table from "../components/table/Table";
+import type { TableColumn } from "../../components/table/Table";
+import Table from "../../components/table/Table";
 import { Link } from "react-router-dom";
-import { useHttp } from "../hooks/http";
-import type { IPublication } from "../types/publication.interface";
+import { useHttp } from "../../hooks/http";
+import type { IPublication } from "../../types/publication.interface";
 
-export default function PublicationView() {
+export default function ListPublicationView() {
   const { handleGetRequest } = useHttp();
   const [publicationList, setPublicationList] = useState<IPublication[]>();
   const [loading, setLoading] = useState(false);
@@ -33,11 +33,13 @@ export default function PublicationView() {
     {
       key: "buku",
       title: "Judul Publikasi",
-      render: (row) => (
-        <Link to={`/detail/${row}`}>
-          <strong className="text-blue-500">{row}</strong>
-        </Link>
-      ),
+      render: (row) => {
+        return (
+          <Link to={`/publications/detail/${row.buku_slug}`}>
+            <strong className="text-blue-500">{row.buku}</strong>
+          </Link>
+        );
+      },
     },
     { key: "nama_opd", title: "Perangkat Daerah" },
     { key: "tahun", title: "Tahun" },

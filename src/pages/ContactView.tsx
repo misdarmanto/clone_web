@@ -100,13 +100,13 @@ export default function ContactView() {
           </h2>
           <div className="w-full flex items-center justify-center rounded-md">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d508659.25290895713!2d105.41409038633682!3d-5.119747550346088!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e40edbc6c11ef3d%3A0x3039d80b220cfe0!2sKabupaten%20Lampung%20Timur%2C%20Lampung!5e0!3m2!1sid!2sid!4v1716337689737!5m2!1sid!2sid"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1017317.8202596318!2d105.08423355386957!3d-5.120178481490755!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e40edbc6c11ef3d%3A0x3039d80b220cfe0!2sKabupaten%20Lampung%20Timur%2C%20Lampung!5e0!3m2!1sid!2sid!4v1750315011315!5m2!1sid!2sid"
               width="100%"
               height="450"
-              allowFullScreen={true}
+              // style="border:0;"
+              allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              data-v-4ba6249b=""
             ></iframe>
           </div>
         </div>
