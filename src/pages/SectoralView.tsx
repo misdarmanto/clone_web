@@ -9,6 +9,8 @@ import type {
   IDropdownOption,
 } from "../types/sectoral.interface";
 import type { IOpd } from "../types/opd.interface";
+import Pagination from "../components/pagination/Pagination";
+import { Package } from "lucide-react";
 
 interface ITableData {
   no: number;
@@ -57,6 +59,7 @@ export default function SectoralView() {
           value: item.id_opd,
         }));
         setDropdownOptions(options);
+        setSize(20);
       }
     } catch (err) {
       console.error("Dropdown fetch error:", err);
@@ -102,6 +105,8 @@ export default function SectoralView() {
           "2023": item.input?.find((v) => v.tahun === 2023)?.jumlah || 0,
           "2024": item.input?.find((v) => v.tahun === 2024)?.jumlah || 0,
         }));
+
+        console.log(response);
         setTableData(mappedData);
       }
     } catch (err) {
@@ -117,7 +122,7 @@ export default function SectoralView() {
 
   useEffect(() => {
     fetchTableData();
-  }, []);
+  }, [page]);
 
   return (
     <div>
@@ -159,6 +164,12 @@ export default function SectoralView() {
 
       <div className="p-5 border border-gray-300 rounded-md">
         <Table data={tableData} columns={TABLE_COLUMNS} loading={loading} />
+        <Pagination
+          currentPage={page}
+          totalPages={size}
+          onPrev={() => setPage((prev) => Math.max(prev - 1, 1))}
+          onNext={() => setPage((prev) => prev + 1)}
+        />
       </div>
     </div>
   );
