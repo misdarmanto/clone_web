@@ -75,7 +75,7 @@ export default function ListDataSetView() {
 
       if (response && Array.isArray(response)) {
         setDatasetList(response);
-        setPage(20);
+        setSize(20);
       }
     } catch (err) {
       console.error("Dropdown fetch error:", err);
@@ -88,6 +88,8 @@ export default function ListDataSetView() {
     fetchDropdownOptions();
     fetchDataset();
   }, []);
+
+  if (loading) return <div>...loading</div>;
 
   return (
     <div className="min-h-screen">
