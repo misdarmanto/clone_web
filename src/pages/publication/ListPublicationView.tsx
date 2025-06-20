@@ -4,6 +4,7 @@ import Table from "../../components/table/Table";
 import { Link } from "react-router-dom";
 import { useHttp } from "../../hooks/http";
 import type { IPublication } from "../../types/publication.interface";
+import { convertTime } from "../../utils/convertTime";
 
 export default function ListPublicationView() {
   const { handleGetRequest } = useHttp();
@@ -29,7 +30,13 @@ export default function ListPublicationView() {
   }, []);
 
   const columns: TableColumn<IPublication>[] = [
-    { key: "id_buku_digital", title: "No" },
+    {
+      key: "id_buku_digital",
+      title: "No",
+      render: (row) => {
+        return <strong>{row.index + 1}</strong>;
+      },
+    },
     {
       key: "buku",
       title: "Judul Publikasi",
@@ -43,7 +50,13 @@ export default function ListPublicationView() {
     },
     { key: "nama_opd", title: "Perangkat Daerah" },
     { key: "tahun", title: "Tahun" },
-    { key: "created_at", title: "Dibuat Pada" },
+    {
+      key: "created_at",
+      title: "Dibuat Pada",
+      render: (row) => {
+        return <strong>{convertTime(row.created_at)}</strong>;
+      },
+    },
   ];
 
   return (

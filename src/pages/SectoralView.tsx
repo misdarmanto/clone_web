@@ -2,13 +2,13 @@ import { useCallback, useEffect, useState } from "react";
 import Button from "../components/buttons/Button";
 import Table, { type TableColumn } from "../components/table/Table";
 import { InputField } from "../components/input/InputField";
-import DropdownSearch from "../components/dropdown/SearchableDropdown";
+import DropdownSearch, {
+  type DropdownSearchOption,
+} from "../components/dropdown/SearchableDropdown";
 import { useHttp } from "../hooks/http";
-import type {
-  IDataSectoralListByOpd,
-  IDropdownOption,
-} from "../types/sectoral.interface";
 import type { IOpd } from "../types/opd.interface";
+import Pagination from "../components/pagination/Pagination";
+import type { ISectoral } from "../types/sectoral.interface";
 
 interface ITableData {
   no: number;
@@ -33,12 +33,18 @@ const TABLE_COLUMNS: TableColumn<ITableData>[] = [
 export default function SectoralView() {
   const { handleGetRequest } = useHttp();
 
-  const [dropdownOptions, setDropdownOptions] = useState<IDropdownOption[]>([]);
+  const [dropdownOptions, setDropdownOptions] = useState<
+    DropdownSearchOption[]
+  >([]);
   const [dropdownSelected, setDropdownSelected] = useState<number>(1);
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState<ITableData[]>([]);
-  const [filterByFirstYear, setFilterByFirstYear] = useState(2021);
-  const [filterByEndYear, setFilterByEndYear] = useState(2025);
+  const [filterByFirstYear, setFilterByFirstYear] = useState<number | null>(
+    null
+  );
+  const [filterByEndYear, setFilterByEndYear] = useState<number | null>(null);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(20);
 
   const fetchDropdownOptions = useCallback(async () => {
     try {
@@ -53,6 +59,7 @@ export default function SectoralView() {
           value: item.id_opd,
         }));
         setDropdownOptions(options);
+        setSize(20);
       }
     } catch (err) {
       console.error("Dropdown fetch error:", err);
@@ -61,12 +68,30 @@ export default function SectoralView() {
     }
   }, [handleGetRequest]);
 
-  const fetchTableData = useCallback(async () => {
+  const fetchTableData = async () => {
     try {
       setLoading(true);
-      const response = (await handleGetRequest({
-        path: `/data-sektoral/list-by-opd?id_user_opd=${dropdownSelected}&dari_tahun=${filterByFirstYear}&sampai_tahun=${filterByEndYear}`,
-      })) as IDataSectoralListByOpd[];
+
+      const params = new URLSearchParams();
+
+      params.append("page", page.toString());
+      params.append("per_page", size.toString());
+
+      if (dropdownSelected) {
+        params.append("id_user_opd", dropdownSelected.toString());
+      }
+
+      if (filterByFirstYear) {
+        params.append("dari_tahun", filterByFirstYear.toString());
+      }
+
+      if (filterByEndYear) {
+        params.append("sampai_tahun", filterByEndYear.toString());
+      }
+
+      const path = `/data-sektoral/list-by-opd?${params.toString()}`;
+
+      const response = (await handleGetRequest({ path })) as ISectoral[];
 
       if (response) {
         const mappedData = response.map((item, index) => ({
@@ -78,6 +103,8 @@ export default function SectoralView() {
           "2023": item.input?.find((v) => v.tahun === 2023)?.jumlah || 0,
           "2024": item.input?.find((v) => v.tahun === 2024)?.jumlah || 0,
         }));
+
+        console.log(response);
         setTableData(mappedData);
       }
     } catch (err) {
@@ -85,7 +112,7 @@ export default function SectoralView() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   useEffect(() => {
     fetchDropdownOptions();
@@ -93,7 +120,7 @@ export default function SectoralView() {
 
   useEffect(() => {
     fetchTableData();
-  }, [fetchTableData]);
+  }, [page]);
 
   return (
     <div>
@@ -116,14 +143,14 @@ export default function SectoralView() {
             label="Dari Tahun"
             type="number"
             placeholder="Dari Tahun..."
-            value={filterByFirstYear.toString()}
+            value={filterByFirstYear?.toString()}
             onChange={(e) => setFilterByFirstYear(Number(e.target.value))}
           />
           <InputField
             label="Sampai Tahun"
             type="number"
             placeholder="Sampai Tahun..."
-            value={filterByEndYear.toString()}
+            value={filterByEndYear?.toString()}
             onChange={(e) => setFilterByEndYear(Number(e.target.value))}
           />
 
@@ -135,6 +162,12 @@ export default function SectoralView() {
 
       <div className="p-5 border border-gray-300 rounded-md">
         <Table data={tableData} columns={TABLE_COLUMNS} loading={loading} />
+        <Pagination
+          currentPage={page}
+          totalPages={size}
+          onPrev={() => setPage((prev) => Math.max(prev - 1, 1))}
+          onNext={() => setPage((prev) => prev + 1)}
+        />
       </div>
     </div>
   );

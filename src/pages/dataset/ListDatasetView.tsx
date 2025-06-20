@@ -4,6 +4,10 @@ import Pagination from "../../components/pagination/Pagination";
 import { CalendarDays, Clock, Building2 } from "lucide-react";
 import folderIcon from "../../assets/folder.webp";
 import { useNavigate } from "react-router-dom";
+import { useHttp } from "../../hooks/http";
+import { useCallback, useEffect, useState } from "react";
+import type { IOpd } from "../../types/opd.interface";
+import type { IDataset } from "../../types/dataset.interface";
 
 const dataSetProdusen = [
   "Kecamatan Purbolinggo",
@@ -20,6 +24,72 @@ const dataSet = [1, 2, 3];
 
 export default function ListDataSetView() {
   const navigation = useNavigate();
+  const { handleGetRequest } = useHttp();
+  const [loading, setLoading] = useState(true);
+  const [opdList, setOpdList] = useState<IOpd[]>([]);
+  const [datasetList, setDatasetList] = useState<IDataset[]>([]);
+
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(20);
+
+  const fetchDropdownOptions = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = (await handleGetRequest({
+        path: "/list-opd",
+      })) as IOpd[];
+
+      if (response && Array.isArray(response)) {
+        setOpdList(response);
+      }
+    } catch (err) {
+      console.error("Dropdown fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [handleGetRequest]);
+
+  const fetchDataset = useCallback(async () => {
+    try {
+      setLoading(true);
+      const params = new URLSearchParams();
+
+      params.append("page", page.toString());
+      params.append("per_page", size.toString());
+
+      // if (dropdownSelected) {
+      //   params.append("id_user_opd", dropdownSelected.toString());
+      // }
+
+      // if (filterByFirstYear) {
+      //   params.append("dari_tahun", filterByFirstYear.toString());
+      // }
+
+      // if (filterByEndYear) {
+      //   params.append("sampai_tahun", filterByEndYear.toString());
+      // }
+
+      const path = `/dataset?${params.toString()}`;
+
+      const response = (await handleGetRequest({ path })) as IDataset[];
+
+      if (response && Array.isArray(response)) {
+        setDatasetList(response);
+        setSize(20);
+      }
+    } catch (err) {
+      console.error("Dropdown fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [handleGetRequest]);
+
+  useEffect(() => {
+    fetchDropdownOptions();
+    fetchDataset();
+  }, []);
+
+  if (loading) return <div>...loading</div>;
 
   return (
     <div className="min-h-screen">
@@ -38,24 +108,24 @@ export default function ListDataSetView() {
 
             <InputField placeholder="Cari Produsen" fullWidth />
             <div className="h-96 overflow-y-scroll">
-              {dataSetProdusen.map((name, i) => (
+              {opdList.map((item, i) => (
                 <button
-                  key={i}
+                  key={`${i}-${item.id_opd}`}
                   className="w-full text-left px-3 py-2 border border-gray-200 rounded hover:bg-gray-100 text-sm"
                 >
-                  {name}
+                  {item.nama_opd}
                 </button>
               ))}
             </div>
           </div>
           <div className="p-5 border rounded border-gray-300">
             <p className="text-xl mb-2">Kategori Data Sektoral</p>
-            {dataSetProdusen.map((name, i) => (
+            {dataSetProdusen.map((item, i) => (
               <button
-                key={i}
+                key={`${i}-${item}`}
                 className="w-full text-left text-blue-500 px-3 py-2 border border-gray-200 rounded hover:bg-gray-100 text-sm"
               >
-                {name}
+                {item}
               </button>
             ))}
           </div>
@@ -73,7 +143,7 @@ export default function ListDataSetView() {
             />
             <div className="flex items-center justify-between gap-4 mb-2 flex-wrap">
               <p className="text-sm text-gray-500">
-                {dataSet.length || 0} Dataset Ditemukan
+                {datasetList.length || 0} Dataset Ditemukan
               </p>
 
               <div className="flex items-center justify-between">
@@ -87,10 +157,10 @@ export default function ListDataSetView() {
             </div>
 
             <div className="space-y-4">
-              {dataSet.map((_) => (
+              {datasetList.map((item, i) => (
                 <div
-                  key={_}
-                  onClick={() => navigation(`detail/${_}`)}
+                  key={`${i}-${item.id}`}
+                  onClick={() => navigation(`detail/${item.id}`)}
                   className="border cursor-pointer border-gray-300 rounded-md shadow p-4 flex flex-col gap-2 w-full"
                 >
                   <div className="flex items-center gap-3">
@@ -102,18 +172,17 @@ export default function ListDataSetView() {
 
                     <div>
                       <h2 className="font-semibold text-sm">
-                        Anak Telantar yang mendapat permakanan sesuai dengan
-                        Standar Gizi Minimal
+                        {item.description}
                       </h2>
-                      <p className="text-sm text-gray-600">11 orang.</p>
+                      {/* <p className="text-sm text-gray-600">11 orang.</p> */}
                       <div className="flex items-center gap-6 text-sm text-gray-500 mt-2">
                         <div className="flex items-center gap-1">
                           <Building2 size={16} />
-                          <span>Dinas Sosial</span>
+                          <span>{item.nama_opd}</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <CalendarDays size={16} />
-                          <span>10-12-2024</span>
+                          <span>{item.modified}</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <Clock size={16} />
@@ -141,14 +210,10 @@ export default function ListDataSetView() {
 
             {/* Pagination */}
             <Pagination
-              currentPage={0}
-              totalPages={0}
-              onPrev={function (): void {
-                throw new Error("Function not implemented.");
-              }}
-              onNext={function (): void {
-                throw new Error("Function not implemented.");
-              }}
+              currentPage={page}
+              totalPages={size}
+              onPrev={() => setPage((prev) => Math.max(prev - 1, 1))}
+              onNext={() => setPage((prev) => prev + 1)}
             />
           </div>
         </div>

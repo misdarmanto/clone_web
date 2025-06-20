@@ -1,4 +1,5 @@
 export interface IPublication {
+  index: number;
   id_buku_digital: number;
   id_opd: number;
   tahun: number;

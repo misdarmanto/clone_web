@@ -5,3 +5,8 @@ export interface IOpd {
   level: number;
   total_ref_sektoral: number;
 }
+
+export interface IOpdUrusan {
+  kode_urusan: string;
+  nama_urusan: string;
+}

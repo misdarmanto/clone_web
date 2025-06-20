@@ -68,7 +68,7 @@ const Table = <T extends object>({
                     className="px-6 py-3 text-p"
                   >
                     {column.render
-                      ? column.render(item)
+                      ? column.render({ ...item, index })
                       : String(item[column.key])}
                   </td>
                 );

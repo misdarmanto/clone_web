@@ -5,7 +5,7 @@ interface IInput {
   jumlah: number;
 }
 
-export interface ISectoral {
+export interface IUrusan {
   id: number;
   kode_urusan: string;
   jenis: number;
