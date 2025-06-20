@@ -2,15 +2,13 @@ import { useCallback, useEffect, useState } from "react";
 import Button from "../components/buttons/Button";
 import Table, { type TableColumn } from "../components/table/Table";
 import { InputField } from "../components/input/InputField";
-import DropdownSearch from "../components/dropdown/SearchableDropdown";
+import DropdownSearch, {
+  type DropdownSearchOption,
+} from "../components/dropdown/SearchableDropdown";
 import { useHttp } from "../hooks/http";
-import type {
-  IDataSectoralListByOpd,
-  IDropdownOption,
-} from "../types/sectoral.interface";
 import type { IOpd } from "../types/opd.interface";
 import Pagination from "../components/pagination/Pagination";
-import { Package } from "lucide-react";
+import type { ISectoral } from "../types/sectoral.interface";
 
 interface ITableData {
   no: number;
@@ -35,7 +33,9 @@ const TABLE_COLUMNS: TableColumn<ITableData>[] = [
 export default function SectoralView() {
   const { handleGetRequest } = useHttp();
 
-  const [dropdownOptions, setDropdownOptions] = useState<IDropdownOption[]>([]);
+  const [dropdownOptions, setDropdownOptions] = useState<
+    DropdownSearchOption[]
+  >([]);
   const [dropdownSelected, setDropdownSelected] = useState<number>(1);
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState<ITableData[]>([]);
@@ -91,9 +91,7 @@ export default function SectoralView() {
 
       const path = `/data-sektoral/list-by-opd?${params.toString()}`;
 
-      const response = (await handleGetRequest({
-        path,
-      })) as IDataSectoralListByOpd[];
+      const response = (await handleGetRequest({ path })) as ISectoral[];
 
       if (response) {
         const mappedData = response.map((item, index) => ({
