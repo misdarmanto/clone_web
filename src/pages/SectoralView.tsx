@@ -37,8 +37,12 @@ export default function SectoralView() {
   const [dropdownSelected, setDropdownSelected] = useState<number>(1);
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState<ITableData[]>([]);
-  const [filterByFirstYear, setFilterByFirstYear] = useState(2021);
-  const [filterByEndYear, setFilterByEndYear] = useState(2025);
+  const [filterByFirstYear, setFilterByFirstYear] = useState<number | null>(
+    null
+  );
+  const [filterByEndYear, setFilterByEndYear] = useState<number | null>(null);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(20);
 
   const fetchDropdownOptions = useCallback(async () => {
     try {
@@ -61,11 +65,31 @@ export default function SectoralView() {
     }
   }, [handleGetRequest]);
 
-  const fetchTableData = useCallback(async () => {
+  const fetchTableData = async () => {
     try {
       setLoading(true);
+
+      const params = new URLSearchParams();
+
+      params.append("page", page.toString());
+      params.append("per_page", size.toString());
+
+      if (dropdownSelected) {
+        params.append("id_user_opd", dropdownSelected.toString());
+      }
+
+      if (filterByFirstYear) {
+        params.append("dari_tahun", filterByFirstYear.toString());
+      }
+
+      if (filterByEndYear) {
+        params.append("sampai_tahun", filterByEndYear.toString());
+      }
+
+      const path = `/data-sektoral/list-by-opd?${params.toString()}`;
+
       const response = (await handleGetRequest({
-        path: `/data-sektoral/list-by-opd?id_user_opd=${dropdownSelected}&dari_tahun=${filterByFirstYear}&sampai_tahun=${filterByEndYear}`,
+        path,
       })) as IDataSectoralListByOpd[];
 
       if (response) {
@@ -85,7 +109,7 @@ export default function SectoralView() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   useEffect(() => {
     fetchDropdownOptions();
@@ -93,7 +117,7 @@ export default function SectoralView() {
 
   useEffect(() => {
     fetchTableData();
-  }, [fetchTableData]);
+  }, []);
 
   return (
     <div>
@@ -116,14 +140,14 @@ export default function SectoralView() {
             label="Dari Tahun"
             type="number"
             placeholder="Dari Tahun..."
-            value={filterByFirstYear.toString()}
+            value={filterByFirstYear?.toString()}
             onChange={(e) => setFilterByFirstYear(Number(e.target.value))}
           />
           <InputField
             label="Sampai Tahun"
             type="number"
             placeholder="Sampai Tahun..."
-            value={filterByEndYear.toString()}
+            value={filterByEndYear?.toString()}
             onChange={(e) => setFilterByEndYear(Number(e.target.value))}
           />
 
