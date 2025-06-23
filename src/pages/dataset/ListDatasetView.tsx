@@ -161,33 +161,31 @@ export default function ListDataSetView() {
                 <div
                   key={`${i}-${item.id}`}
                   onClick={() => navigation(`detail/${item.id}`)}
-                  className="border cursor-pointer border-gray-300 rounded-md shadow p-4 flex flex-col gap-2 w-full"
+                  className="border cursor-pointer border-gray-300 rounded-md shadow p-4 gap-2 w-full grid grid-cols-12 gap-5"
                 >
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={folderIcon}
-                      alt="Empty box"
-                      className="mx-auto w-20"
-                    />
+                  <img
+                    src={folderIcon}
+                    alt="Empty box"
+                    className="mx-auto w-20 col-span-2"
+                  />
 
-                    <div>
-                      <h2 className="font-semibold text-sm">
-                        {item.description}
-                      </h2>
-                      {/* <p className="text-sm text-gray-600">11 orang.</p> */}
-                      <div className="flex items-center gap-6 text-sm text-gray-500 mt-2">
-                        <div className="flex items-center gap-1">
-                          <Building2 size={16} />
-                          <span>{item.nama_opd}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <CalendarDays size={16} />
-                          <span>{item.modified}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Clock size={16} />
-                          <span>1 hari yang lalu</span>
-                        </div>
+                  <div className="col-span-10">
+                    <div
+                      className="font-semibold text-sm"
+                      dangerouslySetInnerHTML={{ __html: item.description }}
+                    />
+                    <div className="flex items-center gap-6 text-sm text-gray-500 mt-2">
+                      <div className="flex items-center gap-1">
+                        <Building2 size={16} />
+                        <span>{item.nama_opd}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <CalendarDays size={16} />
+                        <span>{item.modified}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Clock size={16} />
+                        <span>1 hari yang lalu</span>
                       </div>
                     </div>
                   </div>
