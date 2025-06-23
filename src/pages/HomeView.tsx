@@ -3,25 +3,51 @@ import cardImage from "../assets/card-image.webp";
 import whyMeImage from "../assets/whyme.webp";
 import Button from "../components/buttons/Button";
 import { WavesIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useHttp } from "../hooks/http";
+
+interface ITotalData {
+  data_sektoral: number;
+  dataset: number;
+  urusan: number;
+}
+
+interface ITotalResponse {
+  total: ITotalData;
+}
 
 export default function HomeView() {
-  const cardData = [
-    {
-      title: "Dataset",
-      desc: "Kumpulan data yang diatur dalam format terstruktur dan tersedia di Portal Satu Data Indonesia.",
-      count: 228,
-    },
-    {
-      title: "Statistik Sektoral",
-      desc: "Data statistik yang digunakan untuk memenuhi kebutuhan instansi pemerintah tertentu.",
-      count: 1332,
-    },
-    {
-      title: "Urusan",
-      desc: "Kebijakan tata kelola data pemerintah yang bertujuan untuk menghasilkan data berkualitas dan mudah diakses.",
-      count: 50,
-    },
-  ];
+  const navigation = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const { handleGetRequest } = useHttp();
+  const [totalData, setTotalData] = useState<ITotalData>({
+    data_sektoral: 0,
+    dataset: 0,
+    urusan: 0,
+  });
+
+  const fetchTotalData = async () => {
+    try {
+      const response = (await handleGetRequest({
+        path: "/data-sektoral/beranda",
+      })) as ITotalResponse;
+
+      if (response) {
+        setTotalData(response?.total!);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTotalData();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
 
   return (
     <div>
@@ -42,7 +68,9 @@ export default function HomeView() {
           </p>
           <div className="flex space-x-4">
             <Button>CARI DATA</Button>
-            <Button variant="outlined">LIHAT DATASET</Button>
+            <Button variant="outlined" onClick={() => navigation("/datasets")}>
+              LIHAT DATASET
+            </Button>
           </div>
         </div>
 
@@ -57,36 +85,97 @@ export default function HomeView() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 pb-20 grid grid-cols-1 md:grid-cols-3 gap-6">
-        {cardData.map((item, index) => (
-          <div
-            key={`_${index}`}
-            className={`bg-white shadow-md p-3 w-full flex flex-col gap-2`}
-          >
-            <div className="flex justify-center">
-              <div>
-                <div className="flex justify-center mb-4 rounded-xl">
-                  <img src={cardImage} alt="card image" loading="lazy" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                  {item.title}
-                </h3>
+        <div className={`bg-white shadow-md p-3 w-full flex flex-col gap-2`}>
+          <div className="flex justify-center">
+            <div>
+              <div className="flex justify-center mb-4 rounded-xl">
+                <img src={cardImage} alt="card image" loading="lazy" />
               </div>
-            </div>
-            <div className="flex flex-col text-center gap-2">
-              <p className="text-sm text-gray-600 mb-4">{item.desc}</p>
-            </div>
-            <div className="mt-auto">
-              <div className="flex justify-between items-center">
-                <span className="text-xl font-bold">
-                  {item.count.toLocaleString()}
-                </span>
-                <button className="text-sm font-semibold text-white bg-black rounded px-4 py-2 hover:bg-gray-800 transition">
-                  Lihat Data →
-                </button>
-              </div>
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                Dataset
+              </h3>
             </div>
           </div>
-        ))}
+          <div className="flex flex-col gap-2">
+            <p className="text-sm text-gray-600 mb-4">
+              Kumpulan data yang diatur dalam format terstruktur dan tersedia di
+              Portal Satu Data Indonesia.
+            </p>
+          </div>
+          <div className="mt-auto">
+            <div className="flex justify-between items-center">
+              <span className="text-xl font-bold">{totalData.dataset}</span>
+              <button
+                onClick={() => navigation("/datasets")}
+                className="text-sm font-semibold text-white bg-black rounded px-4 py-2 hover:bg-gray-800 transition"
+              >
+                Lihat Data →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className={`bg-white shadow-md p-3 w-full flex flex-col gap-2`}>
+          <div className="flex justify-center">
+            <div>
+              <div className="flex justify-center mb-4 rounded-xl">
+                <img src={cardImage} alt="card image" loading="lazy" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                Statistik Sektoral
+              </h3>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-sm text-gray-600 mb-4">
+              Data statistik yang digunakan untuk memenuhi kebutuhan instansi
+              pemerintah tertentu.
+            </p>
+          </div>
+          <div className="mt-auto">
+            <div className="flex justify-between items-center">
+              <span className="text-xl font-bold">
+                {totalData.data_sektoral}
+              </span>
+              <button
+                onClick={() => navigation("/sectorals")}
+                className="text-sm font-semibold text-white bg-black rounded px-4 py-2 hover:bg-gray-800 transition"
+              >
+                Lihat Data →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className={`bg-white shadow-md p-3 w-full flex flex-col gap-2`}>
+          <div className="flex justify-center">
+            <div>
+              <div className="flex justify-center mb-4 rounded-xl">
+                <img src={cardImage} alt="card image" loading="lazy" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                Urusan
+              </h3>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-sm text-gray-600 mb-4">
+              Kebijakan tata kelola data pemerintah yang bertujuan untuk
+              menghasilkan data berkualitas dan mudah diakses.
+            </p>
+          </div>
+          <div className="mt-auto">
+            <div className="flex justify-between items-center">
+              <span className="text-xl font-bold">{totalData.urusan}</span>
+              <button
+                onClick={() => navigation("/urusan")}
+                className="text-sm font-semibold text-white bg-black rounded px-4 py-2 hover:bg-gray-800 transition"
+              >
+                Lihat Data →
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
