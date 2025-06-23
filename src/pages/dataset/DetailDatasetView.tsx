@@ -10,13 +10,11 @@ export default function DetailDatasetView() {
   const { handleGetRequest } = useHttp();
   const [datasetDetail, setDatasetDetail] = useState<IDatasetDetail>();
 
-  const fetchTotalData = async () => {
+  const fetchDatasetDetail = async () => {
     try {
       const response = (await handleGetRequest({
         path: `/dataset/detail/${datasetId}`,
       })) as IDatasetDetail;
-
-      console.log(response);
 
       if (response) {
         setDatasetDetail(response);
@@ -29,7 +27,7 @@ export default function DetailDatasetView() {
   };
 
   useEffect(() => {
-    fetchTotalData();
+    fetchDatasetDetail();
   }, []);
 
   if (loading) return <p>Loading...</p>;
