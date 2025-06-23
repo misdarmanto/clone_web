@@ -4,23 +4,6 @@ import type { IDatasetDetail } from "../../types/dataset.interface";
 import { useParams } from "react-router-dom";
 import Button from "../../components/buttons/Button";
 
-const data = [
-  { label: "Nama OPD", value: "Dinas Perindustrian dan Perdagangan" },
-  {
-    label: "Judul Dataset",
-    value: "Data Pasar daerah di Kabupaten Lampung Timur",
-  },
-  {
-    label: "Deskripsi",
-    value: "Dokumen yang Pasar daerah di Kabupaten Lampung Timur",
-  },
-  { label: "Jenis Data", value: "Data Teknis" },
-  { label: "Kategori Data", value: "Ekonomi & Pembangunan" },
-  { label: "Kode DSSD", value: "3.30.000001" },
-  { label: "Uraian DSSD", value: "Agen dan Pasar Rakyat" },
-  { label: "Satuan", value: "Unit" },
-];
-
 export default function DetailDatasetView() {
   const { datasetId } = useParams();
   const [loading, setLoading] = useState(true);
