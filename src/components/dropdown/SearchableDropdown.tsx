@@ -51,7 +51,7 @@ const DropdownSearch: React.FC<DropdownSearchProps> = ({
         onClick={() => setIsOpen((prev) => !prev)}
         className="w-full border border-gray-300 rounded px-3 py-2.5 bg-white text-sm cursor-pointer"
       >
-        {truncateText(selectedLabel, 50) || placeholder}
+        {truncateText(selectedLabel, 40) || placeholder}
       </div>
 
       {isOpen && (
