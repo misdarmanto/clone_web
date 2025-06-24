@@ -8,33 +8,28 @@ import { useHttp } from "../../hooks/http";
 import { useCallback, useEffect, useState } from "react";
 import type { IOpd } from "../../types/opd.interface";
 import type { IDataset } from "../../types/dataset.interface";
+import { convertTime } from "../../utils/convertTime";
 
 const dataSetProdusen = [
-  "Kecamatan Purbolinggo",
-  "Puskesmas Trimulyo",
-  "Puskesmas Adirejo",
-  "Kecamatan Marga Tiga",
-  "Badan Pendapatan Daerah",
-  "Puskesmas Jabung",
-  "Puskesmas Labuhan Maringgai",
-  "Puskesmas Raman Utara",
+  { title: "Sarana & Infrastruktur", total: 0 },
+  { title: "Ekonomi & Pembangunan", total: 0 },
+  { title: "Sosial & Kesejahteraan Masyarakat", total: 0 },
+  { title: "Kebijakan & Legislasi", total: 0 },
 ];
-
-const dataSet = [1, 2, 3];
 
 export default function ListDataSetView() {
   const navigation = useNavigate();
-  const { handleGetRequest } = useHttp();
+  const { handleGetRequest, handleGetPaginatedData } = useHttp();
   const [loading, setLoading] = useState(true);
   const [opdList, setOpdList] = useState<IOpd[]>([]);
   const [datasetList, setDatasetList] = useState<IDataset[]>([]);
+  const [userOpdSelected, setUserOpdSelected] = useState<number>(0);
 
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(20);
+  const [totalPage, setTotalPage] = useState(0);
 
   const fetchDropdownOptions = useCallback(async () => {
     try {
-      setLoading(true);
       const response = (await handleGetRequest({
         path: "/list-opd",
       })) as IOpd[];
@@ -51,43 +46,35 @@ export default function ListDataSetView() {
 
   const fetchDataset = useCallback(async () => {
     try {
-      setLoading(true);
-      const params = new URLSearchParams();
+      const response = await handleGetPaginatedData({
+        path: "/dataset",
+        size: 10,
+        filter: {
+          id_user_opd: userOpdSelected,
+        },
+      });
 
-      params.append("page", page.toString());
-      params.append("per_page", size.toString());
-
-      // if (dropdownSelected) {
-      //   params.append("id_user_opd", dropdownSelected.toString());
-      // }
-
-      // if (filterByFirstYear) {
-      //   params.append("dari_tahun", filterByFirstYear.toString());
-      // }
-
-      // if (filterByEndYear) {
-      //   params.append("sampai_tahun", filterByEndYear.toString());
-      // }
-
-      const path = `/dataset?${params.toString()}`;
-
-      const response = (await handleGetRequest({ path })) as IDataset[];
-
-      if (response && Array.isArray(response)) {
-        setDatasetList(response);
-        setSize(20);
+      if (response && Array.isArray(response?.items)) {
+        setDatasetList(response.items);
+        setTotalPage(response.totalPage);
       }
     } catch (err) {
       console.error("Dropdown fetch error:", err);
-    } finally {
-      setLoading(false);
     }
-  }, [handleGetRequest]);
+  }, [handleGetRequest, userOpdSelected]);
+
+  const handleSelectUserOpd = (userOpdId: number) => {
+    setUserOpdSelected(userOpdId);
+  };
 
   useEffect(() => {
     fetchDropdownOptions();
     fetchDataset();
   }, []);
+
+  useEffect(() => {
+    fetchDataset();
+  }, [userOpdSelected]);
 
   if (loading) return <div>...loading</div>;
 
@@ -102,7 +89,7 @@ export default function ListDataSetView() {
 
       <div className="grid grid-cols-1 md:grid-cols-6 ">
         {/* Sidebar: Produsen Dataset */}
-        <div className="lg:col-span-2 space-y-2  sm:mr-5 mb-5 sm:mb-0 ">
+        <div className="lg:col-span-2 space-y-2  md:mr-5 mb-5 md:mb-0 ">
           <div className="h-[500px] p-5 mb-5 border rounded border-gray-300">
             <p className="text-h4 mb-2">Produsen Dataset</p>
 
@@ -111,7 +98,8 @@ export default function ListDataSetView() {
               {opdList.map((item, i) => (
                 <button
                   key={`${i}-${item.id_opd}`}
-                  className="w-full text-left px-3 py-2 border border-gray-200 rounded hover:bg-gray-100 text-sm"
+                  className="w-full text-left px-3 py-2 border border-gray-200 rounded hover:bg-gray-200 text-sm"
+                  onClick={() => handleSelectUserOpd(item.id_opd)}
                 >
                   {item.nama_opd}
                 </button>
@@ -121,12 +109,19 @@ export default function ListDataSetView() {
           <div className="p-5 border rounded border-gray-300">
             <p className="text-xl mb-2">Kategori Data Sektoral</p>
             {dataSetProdusen.map((item, i) => (
-              <button
-                key={`${i}-${item}`}
-                className="w-full text-left text-blue-500 px-3 py-2 border border-gray-200 rounded hover:bg-gray-100 text-sm"
-              >
-                {item}
-              </button>
+              <div className="flex justify-between items-center">
+                <button
+                  key={`${i}-${item}`}
+                  className="w-full text-left text-blue-500 py-2 border border-gray-200 rounded hover:bg-gray-100 text-sm"
+                >
+                  {item.title}
+                </button>
+                <div className="bg-blue-500 w-5 h-5 rounded-full flex items-center justify-center">
+                  <span className="text-sm text-white text-center">
+                    {item.total}
+                  </span>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -161,40 +156,45 @@ export default function ListDataSetView() {
                 <div
                   key={`${i}-${item.id}`}
                   onClick={() => navigation(`detail/${item.id}`)}
-                  className="border cursor-pointer border-gray-300 rounded-md shadow p-4 flex flex-col gap-2 w-full"
+                  className="border cursor-pointer border-gray-300 rounded-md shadow p-4 gap-2 w-full grid grid-cols-12 gap-5"
                 >
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={folderIcon}
-                      alt="Empty box"
-                      className="mx-auto w-20"
-                    />
+                  <img
+                    src={folderIcon}
+                    alt="Empty box"
+                    className="mx-auto w-20 col-span-2"
+                  />
 
-                    <div>
-                      <h2 className="font-semibold text-sm">
-                        {item.description}
-                      </h2>
-                      {/* <p className="text-sm text-gray-600">11 orang.</p> */}
-                      <div className="flex items-center gap-6 text-sm text-gray-500 mt-2">
-                        <div className="flex items-center gap-1">
-                          <Building2 size={16} />
-                          <span>{item.nama_opd}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <CalendarDays size={16} />
-                          <span>{item.modified}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Clock size={16} />
-                          <span>1 hari yang lalu</span>
-                        </div>
+                  <div className="col-span-10">
+                    <h1 className="font-extrabold mb-2">{item.uraian_dssd}</h1>
+                    <p
+                      dangerouslySetInnerHTML={{ __html: item.description }}
+                      className="text-sm"
+                    />
+                    <div className="flex items-center gap-6 text-sm text-gray-500 mt-2">
+                      <div className="flex items-center gap-1">
+                        <Building2 size={16} />
+                        <span className="text-xs font-bold">
+                          {item.nama_opd}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <CalendarDays size={16} />
+                        <span className="text-xs font-bold">
+                          {convertTime(item.modified)}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Clock size={16} />
+                        <span className="text-xs font-bold">
+                          1 hari yang lalu
+                        </span>
                       </div>
                     </div>
                   </div>
                 </div>
               ))}
 
-              {Array.isArray(dataSet) && dataSet.length < 0 && (
+              {Array.isArray(datasetList) && datasetList.length === 0 && (
                 <div className="text-center py-20">
                   <img
                     src={emptyIcon}
@@ -211,7 +211,7 @@ export default function ListDataSetView() {
             {/* Pagination */}
             <Pagination
               currentPage={page}
-              totalPages={size}
+              totalPages={totalPage}
               onPrev={() => setPage((prev) => Math.max(prev - 1, 1))}
               onNext={() => setPage((prev) => prev + 1)}
             />

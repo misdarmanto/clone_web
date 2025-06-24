@@ -28,6 +28,15 @@ interface GetTableDataRequest {
   filter?: Record<string, unknown>;
 }
 
+interface IPaginateResponse {
+  items: any[];
+  currentPage: number;
+  nextPage: number;
+  totalPage: number;
+  pageSize: number;
+  totalItem: number;
+}
+
 interface ErrorResponse {
   message: string;
 }
@@ -37,7 +46,9 @@ export interface HttpRequestMethods {
   handlePostRequest: (value: PostRequest) => Promise<unknown>;
   handleDeleteRequest: (value: DeleteRequest) => Promise<unknown>;
   handleUpdateRequest: (value: UpdateRequest) => Promise<unknown>;
-  handleGetTableDataRequest: (value: GetTableDataRequest) => Promise<unknown>;
+  handleGetPaginatedData: (
+    value: GetTableDataRequest
+  ) => Promise<IPaginateResponse>;
 }
 
 export const useHttp = (): HttpRequestMethods => {
@@ -131,16 +142,15 @@ export const useHttp = (): HttpRequestMethods => {
     }
   };
 
-  const handleGetTableDataRequest = async ({
+  const handleGetPaginatedData = async ({
     path,
     page = 0,
     size = 10,
     filter,
-  }: GetTableDataRequest): Promise<unknown> => {
+  }: GetTableDataRequest): Promise<IPaginateResponse | any> => {
     try {
-      return await httpService.getTableData({
-        url: `${appConfigs.apiUrl}${path}`,
-        pagination: true,
+      return await httpService.getPaginatedData({
+        path: `${appConfigs.apiUrl}${path}`,
         page,
         size,
         filters: filter,
@@ -157,6 +167,6 @@ export const useHttp = (): HttpRequestMethods => {
     handlePostRequest,
     handleDeleteRequest,
     handleUpdateRequest,
-    handleGetTableDataRequest,
+    handleGetPaginatedData,
   };
 };

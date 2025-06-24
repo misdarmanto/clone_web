@@ -1,20 +1,36 @@
+import { useEffect, useState } from "react";
+import { useHttp } from "../../hooks/http";
+import type { IDatasetDetail } from "../../types/dataset.interface";
+import { useParams } from "react-router-dom";
+import Button from "../../components/buttons/Button";
+
 export default function DetailDatasetView() {
-  const data = [
-    { label: "Nama OPD", value: "Dinas Perindustrian dan Perdagangan" },
-    {
-      label: "Judul Dataset",
-      value: "Data Pasar daerah di Kabupaten Lampung Timur",
-    },
-    {
-      label: "Deskripsi",
-      value: "Dokumen yang Pasar daerah di Kabupaten Lampung Timur",
-    },
-    { label: "Jenis Data", value: "Data Teknis" },
-    { label: "Kategori Data", value: "Ekonomi & Pembangunan" },
-    { label: "Kode DSSD", value: "3.30.000001" },
-    { label: "Uraian DSSD", value: "Agen dan Pasar Rakyat" },
-    { label: "Satuan", value: "Unit" },
-  ];
+  const { datasetId } = useParams();
+  const [loading, setLoading] = useState(true);
+  const { handleGetRequest } = useHttp();
+  const [datasetDetail, setDatasetDetail] = useState<IDatasetDetail>();
+
+  const fetchDatasetDetail = async () => {
+    try {
+      const response = (await handleGetRequest({
+        path: `/dataset/detail/${datasetId}`,
+      })) as IDatasetDetail;
+
+      if (response) {
+        setDatasetDetail(response);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDatasetDetail();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
 
   return (
     <div>
@@ -25,15 +41,107 @@ export default function DetailDatasetView() {
         dari seluruh Organisasi Perangkat Daerah di Lampung Timur.
       </p>
 
-      <div className="bg-white border border-gray-300 p-5 rounded-md shadow-sm overflow-hidden">
+      <div className="bg-white border border-gray-300 p-5 rounded-md shadow-sm overflow-hidden mb-5">
         <table className="min-w-full divide-y divide-gray-200">
           <tbody>
-            {data.map((row, i) => (
-              <tr key={i} className="even:bg-gray-50">
-                <td className="w-1/6 px-6 py-3 font-bold text-gray-700">
-                  {row.label}
+            <tr className="even:bg-gray-50">
+              <td className="w-1/6 px-6 py-3 font-bold text-gray-700">
+                Nama OPD
+              </td>
+              <td className="px-6 py-3 text-gray-900">
+                {datasetDetail?.nama_opd}
+              </td>
+            </tr>
+            <tr className="even:bg-gray-50">
+              <td className="w-1/6 px-6 py-3 font-bold text-gray-700">
+                Judul Dataset
+              </td>
+              <td className="px-6 py-3 text-gray-900">
+                {datasetDetail?.title}
+              </td>
+            </tr>
+            <tr className="even:bg-gray-50">
+              <td className="w-1/6 px-6 py-3 font-bold text-gray-700">
+                Deskripsi
+              </td>
+              <td className="px-6 py-3 text-gray-900">
+                {datasetDetail?.description}
+              </td>
+            </tr>
+            <tr className="even:bg-gray-50">
+              <td className="w-1/6 px-6 py-3 font-bold text-gray-700">
+                Jenis Data
+              </td>
+              <td className="px-6 py-3 text-gray-900">
+                {datasetDetail?.jenis_string}
+              </td>
+            </tr>
+            <tr className="even:bg-gray-50">
+              <td className="w-1/6 px-6 py-3 font-bold text-gray-700">
+                Kategori Data
+              </td>
+              <td className="px-6 py-3 text-gray-900">
+                {datasetDetail?.kategori_string}
+              </td>
+            </tr>
+            <tr className="even:bg-gray-50">
+              <td className="w-1/6 px-6 py-3 font-bold text-gray-700">
+                Kode DSSD
+              </td>
+              <td className="px-6 py-3 text-gray-900">
+                {datasetDetail?.kode_dssd}
+              </td>
+            </tr>
+            <tr className="even:bg-gray-50">
+              <td className="w-1/6 px-6 py-3 font-bold text-gray-700">
+                Uraian DSSD
+              </td>
+              <td className="px-6 py-3 text-gray-900">
+                {datasetDetail?.uraian_dssd}
+              </td>
+            </tr>
+            <tr className="even:bg-gray-50">
+              <td className="w-1/6 px-6 py-3 font-bold text-gray-700">
+                Satuan
+              </td>
+              <td className="px-6 py-3 text-gray-900">
+                {datasetDetail?.satuan}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="bg-white border border-gray-300 p-5 rounded-md shadow-sm overflow-hidden">
+        <h4 className="text-h4">
+          Jumlah Data Sektoral & Api Interoperabilitas
+        </h4>
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                Tahun
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                Jumlah
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                Method
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                API
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {datasetDetail?.input.map((item, i) => (
+              <tr className="even:bg-gray-50" key={`${i}-${item.kode_dssd}`}>
+                <td className="px-6 py-3 text-gray-900">{item.tahun}</td>
+                <td className="px-6 py-3 text-gray-900">{item.jumlah}</td>
+                <td className="px-6 py-3 text-gray-900">GET</td>
+                <td className="px-6 py-3 text-gray-900">
+                  <Button size="small">Open API</Button>
                 </td>
-                <td className="px-6 py-3 text-gray-900">{row.value}</td>
               </tr>
             ))}
           </tbody>

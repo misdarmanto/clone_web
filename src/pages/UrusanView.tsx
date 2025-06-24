@@ -31,7 +31,7 @@ const TABLE_COLUMNS: TableColumn<ITableData>[] = [
 ];
 
 export default function UrusanView() {
-  const { handleGetRequest } = useHttp();
+  const { handleGetRequest, handleGetPaginatedData } = useHttp();
 
   const [dropdownOptions, setDropdownOptions] = useState<
     DropdownSearchOption[]
@@ -43,8 +43,8 @@ export default function UrusanView() {
     null
   );
   const [filterByEndYear, setFilterByEndYear] = useState<number | null>(null);
-  const [page, setPage] = useState(1);
-  const [size, setSize] = useState(20);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
 
   const fetchDropdownOptions = useCallback(async () => {
     try {
@@ -59,7 +59,6 @@ export default function UrusanView() {
           value: item.kode_urusan,
         }));
         setDropdownOptions(options);
-        setSize(20);
       }
     } catch (err) {
       console.error("Dropdown fetch error:", err);
@@ -70,31 +69,19 @@ export default function UrusanView() {
 
   const fetchTableData = async () => {
     try {
-      setLoading(true);
-
-      const params = new URLSearchParams();
-
-      params.append("page", page.toString());
-      params.append("per_page", size.toString());
-
-      if (dropdownSelected) {
-        params.append("kode_urusan", dropdownSelected.toString());
-      }
-
-      if (filterByFirstYear) {
-        params.append("dari_tahun", filterByFirstYear.toString());
-      }
-
-      if (filterByEndYear) {
-        params.append("sampai_tahun", filterByEndYear.toString());
-      }
-
-      const path = `/data-sektoral/list-by-urusan?${params.toString()}`;
-
-      const response = (await handleGetRequest({ path })) as IUrusan[];
+      const response = await handleGetPaginatedData({
+        path: "/data-sektoral/list-by-urusan",
+        page: currentPage,
+        filter: {
+          kode_urusan: dropdownSelected,
+          dari_tahun: filterByEndYear,
+          sampai_tahun: filterByEndYear,
+        },
+      });
 
       if (response) {
-        const mappedData = response.map((item, index) => ({
+        const items = response.items as IUrusan[];
+        const mappedData = items.map((item, index) => ({
           no: index + 1,
           kodeDssd: item.kode_dssd,
           uraiDssd: item.uraian_dssd,
@@ -104,7 +91,7 @@ export default function UrusanView() {
           "2024": item.input?.find((v) => v.tahun === 2024)?.jumlah || 0,
         }));
 
-        console.log(response);
+        setTotalPage(response.totalPage);
         setTableData(mappedData);
       }
     } catch (err) {
@@ -120,7 +107,7 @@ export default function UrusanView() {
 
   useEffect(() => {
     fetchTableData();
-  }, [page]);
+  }, [currentPage]);
 
   return (
     <div>
@@ -163,10 +150,10 @@ export default function UrusanView() {
       <div className="p-5 border border-gray-300 rounded-md">
         <Table data={tableData} columns={TABLE_COLUMNS} loading={loading} />
         <Pagination
-          currentPage={page}
-          totalPages={size}
-          onPrev={() => setPage((prev) => Math.max(prev - 1, 1))}
-          onNext={() => setPage((prev) => prev + 1)}
+          currentPage={currentPage}
+          totalPages={totalPage}
+          onPrev={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          onNext={() => setCurrentPage((prev) => prev + 1)}
         />
       </div>
     </div>

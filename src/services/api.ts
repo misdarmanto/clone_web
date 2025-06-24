@@ -1,9 +1,8 @@
 import axios from "axios";
 import { appConfigs } from "../configs/appConfigs";
 
-export interface GetTableDataTypes {
-  url: string;
-  pagination?: boolean | true;
+export interface IPaginateParams {
+  path: string;
   page?: number | 0;
   size?: number | 10;
   filters?: any;
@@ -26,9 +25,9 @@ export class HttpService {
           ...getHeaders(),
         },
       });
+
       return result.data;
     } catch (error: any) {
-      console.log(error);
       console.log(error.response.data.errorMessage || error.message);
 
       if (error.response && error.response.status === 401) {
@@ -100,12 +99,12 @@ export class HttpService {
     }
   }
 
-  public async getTableData(params: GetTableDataTypes) {
-    const { url, pagination, page, size, filters } = params;
+  public async getPaginatedData(params: IPaginateParams) {
+    const { path, page, size, filters } = params;
     try {
       const queryFilter = new URLSearchParams(filters).toString();
       const result = await axios.get(
-        `${url}?pagination=${pagination}&page=${page}&size=${size}&${queryFilter}`,
+        `${path}?page=${page}&per_page=${size}&${queryFilter}`,
         {
           headers: {
             ...getHeaders(),
@@ -114,9 +113,12 @@ export class HttpService {
       );
 
       return {
-        ...result.data,
-        page: page,
-        size: size,
+        items: result.data,
+        currentPage: result?.headers["x-pagination-current-page"] ?? 0,
+        nextPage: result?.headers["x-pagination-next-page"] ?? 0,
+        totalPage: result?.headers["x-pagination-page-count"] ?? 0,
+        pageSize: result?.headers["x-pagination-page-size"] ?? 0,
+        totalItem: result?.headers["x-pagination-total-count"] ?? 0,
       };
     } catch (error: any) {
       console.log(error.response.data.errorMessage || error.message);
