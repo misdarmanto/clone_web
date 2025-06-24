@@ -31,7 +31,7 @@ const TABLE_COLUMNS: TableColumn<ITableData>[] = [
 ];
 
 export default function SectoralView() {
-  const { handleGetRequest } = useHttp();
+  const { handleGetRequest, handleGetPaginatedData } = useHttp();
 
   const [dropdownOptions, setDropdownOptions] = useState<
     DropdownSearchOption[]
@@ -43,8 +43,8 @@ export default function SectoralView() {
     null
   );
   const [filterByEndYear, setFilterByEndYear] = useState<number | null>(null);
-  const [page, setPage] = useState(1);
-  const [size, setSize] = useState(20);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
 
   const fetchDropdownOptions = useCallback(async () => {
     try {
@@ -59,7 +59,6 @@ export default function SectoralView() {
           value: item.id_opd,
         }));
         setDropdownOptions(options);
-        setSize(20);
       }
     } catch (err) {
       console.error("Dropdown fetch error:", err);
@@ -70,29 +69,19 @@ export default function SectoralView() {
 
   const fetchTableData = async () => {
     try {
-      const params = new URLSearchParams();
-
-      params.append("page", page.toString());
-      params.append("per_page", size.toString());
-
-      if (dropdownSelected) {
-        params.append("id_user_opd", dropdownSelected.toString());
-      }
-
-      if (filterByFirstYear) {
-        params.append("dari_tahun", filterByFirstYear.toString());
-      }
-
-      if (filterByEndYear) {
-        params.append("sampai_tahun", filterByEndYear.toString());
-      }
-
-      const path = `/data-sektoral/list-by-opd?${params.toString()}`;
-
-      const response = (await handleGetRequest({ path })) as ISectoral[];
+      const response = await handleGetPaginatedData({
+        path: "/data-sektoral/list-by-opd",
+        page: currentPage,
+        filter: {
+          id_user_opd: dropdownSelected,
+          dari_tahun: filterByEndYear,
+          sampai_tahun: filterByEndYear,
+        },
+      });
 
       if (response) {
-        const mappedData = response.map((item, index) => ({
+        const items = response.items as ISectoral[];
+        const mappedData = items.map((item, index) => ({
           no: index + 1,
           kodeDssd: item.kode_dssd,
           uraiDssd: item.uraian_dssd,
@@ -102,7 +91,7 @@ export default function SectoralView() {
           "2024": item.input?.find((v) => v.tahun === 2024)?.jumlah || 0,
         }));
 
-        console.log(response);
+        setTotalPage(response.totalPage);
         setTableData(mappedData);
       }
     } catch (err) {
@@ -118,7 +107,7 @@ export default function SectoralView() {
 
   useEffect(() => {
     fetchTableData();
-  }, [page]);
+  }, [currentPage]);
 
   return (
     <div>
@@ -161,10 +150,10 @@ export default function SectoralView() {
       <div className="p-5 border border-gray-300 rounded-md">
         <Table data={tableData} columns={TABLE_COLUMNS} loading={loading} />
         <Pagination
-          currentPage={page}
-          totalPages={size}
-          onPrev={() => setPage((prev) => Math.max(prev - 1, 1))}
-          onNext={() => setPage((prev) => prev + 1)}
+          currentPage={currentPage}
+          totalPages={totalPage}
+          onPrev={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          onNext={() => setCurrentPage((prev) => prev + 1)}
         />
       </div>
     </div>

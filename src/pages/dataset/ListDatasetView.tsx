@@ -26,10 +26,10 @@ export default function ListDataSetView() {
   const [loading, setLoading] = useState(true);
   const [opdList, setOpdList] = useState<IOpd[]>([]);
   const [datasetList, setDatasetList] = useState<IDataset[]>([]);
-  const [userOpdSelected, setUserOpdSelected] = useState<number | null>(null);
+  const [userOpdSelected, setUserOpdSelected] = useState<number>(0);
 
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(20);
+  const [totalPage, setTotalPage] = useState(0);
 
   const fetchDropdownOptions = useCallback(async () => {
     try {
@@ -59,7 +59,7 @@ export default function ListDataSetView() {
 
       if (response && Array.isArray(response?.items)) {
         setDatasetList(response.items);
-        setSize(response.totalCount);
+        setTotalPage(response.totalPage);
       }
     } catch (err) {
       console.error("Dropdown fetch error:", err);
@@ -200,7 +200,7 @@ export default function ListDataSetView() {
             {/* Pagination */}
             <Pagination
               currentPage={page}
-              totalPages={size}
+              totalPages={totalPage}
               onPrev={() => setPage((prev) => Math.max(prev - 1, 1))}
               onNext={() => setPage((prev) => prev + 1)}
             />

@@ -116,9 +116,9 @@ export class HttpService {
         items: result.data,
         currentPage: result?.headers["x-pagination-current-page"] ?? 0,
         nextPage: result?.headers["x-pagination-next-page"] ?? 0,
-        pageCount: result?.headers["x-pagination-page-count"] ?? 0,
+        totalPage: result?.headers["x-pagination-page-count"] ?? 0,
         pageSize: result?.headers["x-pagination-page-size"] ?? 0,
-        totalCount: result?.headers["x-pagination-total-count"] ?? 0,
+        totalItem: result?.headers["x-pagination-total-count"] ?? 0,
       };
     } catch (error: any) {
       console.log(error.response.data.errorMessage || error.message);

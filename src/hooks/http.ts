@@ -32,9 +32,9 @@ interface IPaginateResponse {
   items: any[];
   currentPage: number;
   nextPage: number;
-  pageCount: number;
+  totalPage: number;
   pageSize: number;
-  totalCount: number;
+  totalItem: number;
 }
 
 interface ErrorResponse {
