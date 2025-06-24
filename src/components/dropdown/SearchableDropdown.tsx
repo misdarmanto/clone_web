@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { truncateText } from "../../utils/trunctText";
 
 export interface DropdownSearchOption {
   label: string;
@@ -50,7 +51,7 @@ const DropdownSearch: React.FC<DropdownSearchProps> = ({
         onClick={() => setIsOpen((prev) => !prev)}
         className="w-full border border-gray-300 rounded px-3 py-2.5 bg-white text-sm cursor-pointer"
       >
-        {selectedLabel || placeholder}
+        {truncateText(selectedLabel, 50) || placeholder}
       </div>
 
       {isOpen && (
