@@ -1,19 +1,19 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { InputField } from "../components/input/InputField";
-import { type LoginFormData, loginSchema } from "../schema/loginSchema";
 import Button from "../components/buttons/Button";
+import { contactSchema, type ContactFormData } from "../schema/contactSchema";
 
 export default function ContactView() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
   });
 
-  const onSubmit = (data: LoginFormData) => {
+  const onSubmit = (data: ContactFormData) => {
     console.log("Login data:", data);
   };
 
@@ -65,14 +65,14 @@ export default function ContactView() {
             <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
               <InputField
                 label={"Nama"}
-                registration={register("nip")}
-                error={errors.nip}
+                registration={register("name")}
+                error={errors.name}
                 fullWidth
               />
               <InputField
                 label={"Alamat Email"}
-                registration={register("nip")}
-                error={errors.nip}
+                registration={register("email")}
+                error={errors.email}
                 fullWidth
               />
               <div>
@@ -84,8 +84,12 @@ export default function ContactView() {
                 </label>
                 <textarea
                   id="message"
-                  {...register("nip")}
-                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500 h-32 resize-none"
+                  {...register("textMessage")}
+                  className={`w-full p-3 border rounded-md focus:outline-none focus:ring-1  h-32 resize-none  ${
+                    errors.textMessage
+                      ? "border-red-500 focus:ring-red-400"
+                      : "border-gray-300 focus:ring-gray-400"
+                  }`}
                   placeholder="Tulis pesan Anda"
                 />
               </div>
@@ -103,7 +107,6 @@ export default function ContactView() {
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1017317.8202596318!2d105.08423355386957!3d-5.120178481490755!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e40edbc6c11ef3d%3A0x3039d80b220cfe0!2sKabupaten%20Lampung%20Timur%2C%20Lampung!5e0!3m2!1sid!2sid!4v1750315011315!5m2!1sid!2sid"
               width="100%"
               height="450"
-              // style="border:0;"
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
