@@ -20,21 +20,19 @@ const dataSetProdusen = [
   "Puskesmas Raman Utara",
 ];
 
-const dataSet = [1, 2, 3];
-
 export default function ListDataSetView() {
   const navigation = useNavigate();
-  const { handleGetRequest } = useHttp();
+  const { handleGetRequest, handleGetPaginatedData } = useHttp();
   const [loading, setLoading] = useState(true);
   const [opdList, setOpdList] = useState<IOpd[]>([]);
   const [datasetList, setDatasetList] = useState<IDataset[]>([]);
+  const [userOpdSelected, setUserOpdSelected] = useState<number | null>(null);
 
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(20);
 
   const fetchDropdownOptions = useCallback(async () => {
     try {
-      setLoading(true);
       const response = (await handleGetRequest({
         path: "/list-opd",
       })) as IOpd[];
@@ -51,43 +49,35 @@ export default function ListDataSetView() {
 
   const fetchDataset = useCallback(async () => {
     try {
-      setLoading(true);
-      const params = new URLSearchParams();
+      const response = await handleGetPaginatedData({
+        path: "/dataset",
+        size: 10,
+        filter: {
+          id_user_opd: userOpdSelected,
+        },
+      });
 
-      params.append("page", page.toString());
-      params.append("per_page", size.toString());
-
-      // if (dropdownSelected) {
-      //   params.append("id_user_opd", dropdownSelected.toString());
-      // }
-
-      // if (filterByFirstYear) {
-      //   params.append("dari_tahun", filterByFirstYear.toString());
-      // }
-
-      // if (filterByEndYear) {
-      //   params.append("sampai_tahun", filterByEndYear.toString());
-      // }
-
-      const path = `/dataset?${params.toString()}`;
-
-      const response = (await handleGetRequest({ path })) as IDataset[];
-
-      if (response && Array.isArray(response)) {
-        setDatasetList(response);
-        setSize(20);
+      if (response && Array.isArray(response?.items)) {
+        setDatasetList(response.items);
+        setSize(response.totalCount);
       }
     } catch (err) {
       console.error("Dropdown fetch error:", err);
-    } finally {
-      setLoading(false);
     }
-  }, [handleGetRequest]);
+  }, [handleGetRequest, userOpdSelected]);
+
+  const handleSelectUserOpd = (userOpdId: number) => {
+    setUserOpdSelected(userOpdId);
+  };
 
   useEffect(() => {
     fetchDropdownOptions();
     fetchDataset();
   }, []);
+
+  useEffect(() => {
+    fetchDataset();
+  }, [userOpdSelected]);
 
   if (loading) return <div>...loading</div>;
 
@@ -102,7 +92,7 @@ export default function ListDataSetView() {
 
       <div className="grid grid-cols-1 md:grid-cols-6 ">
         {/* Sidebar: Produsen Dataset */}
-        <div className="lg:col-span-2 space-y-2  sm:mr-5 mb-5 sm:mb-0 ">
+        <div className="lg:col-span-2 space-y-2  md:mr-5 mb-5 md:mb-0 ">
           <div className="h-[500px] p-5 mb-5 border rounded border-gray-300">
             <p className="text-h4 mb-2">Produsen Dataset</p>
 
@@ -111,7 +101,8 @@ export default function ListDataSetView() {
               {opdList.map((item, i) => (
                 <button
                   key={`${i}-${item.id_opd}`}
-                  className="w-full text-left px-3 py-2 border border-gray-200 rounded hover:bg-gray-100 text-sm"
+                  className="w-full text-left px-3 py-2 border border-gray-200 rounded hover:bg-gray-200 text-sm"
+                  onClick={() => handleSelectUserOpd(item.id_opd)}
                 >
                   {item.nama_opd}
                 </button>
@@ -192,7 +183,7 @@ export default function ListDataSetView() {
                 </div>
               ))}
 
-              {Array.isArray(dataSet) && dataSet.length < 0 && (
+              {Array.isArray(datasetList) && datasetList.length === 0 && (
                 <div className="text-center py-20">
                   <img
                     src={emptyIcon}

@@ -37,7 +37,7 @@ export default function SectoralView() {
     DropdownSearchOption[]
   >([]);
   const [dropdownSelected, setDropdownSelected] = useState<number>(1);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState<ITableData[]>([]);
   const [filterByFirstYear, setFilterByFirstYear] = useState<number | null>(
     null
@@ -70,8 +70,6 @@ export default function SectoralView() {
 
   const fetchTableData = async () => {
     try {
-      setLoading(true);
-
       const params = new URLSearchParams();
 
       params.append("page", page.toString());
