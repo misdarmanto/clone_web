@@ -3,6 +3,7 @@ import { useHttp } from "../../hooks/http";
 import type { IDatasetDetail } from "../../types/dataset.interface";
 import { useParams } from "react-router-dom";
 import Button from "../../components/buttons/Button";
+import ReactApexChart from "react-apexcharts";
 
 export default function DetailDatasetView() {
   const { datasetId } = useParams();
@@ -32,6 +33,47 @@ export default function DetailDatasetView() {
 
   if (loading) return <p>Loading...</p>;
 
+  // Prepare chart data
+  const series = [
+    {
+      name: "Jumlah",
+      data: datasetDetail?.input.map((item) => item.jumlah) || [],
+    },
+  ];
+
+  const options: any = {
+    chart: {
+      type: "bar",
+      height: 350,
+    },
+    colors: ["#2196F3"],
+
+    plotOptions: {
+      bar: {
+        borderRadius: 4,
+        horizontal: false,
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    xaxis: {
+      categories: datasetDetail?.input.map((item) => item.tahun) || [],
+    },
+    yaxis: {
+      title: {
+        text: "Jumlah Data",
+      },
+    },
+    tooltip: {
+      y: {
+        formatter(val: number) {
+          return `${val}`;
+        },
+      },
+    },
+  };
+
   return (
     <div>
       <h1 className="text-h2 font-bold mb-2 text-orange-300">Detail Dataset</h1>
@@ -41,6 +83,7 @@ export default function DetailDatasetView() {
         dari seluruh Organisasi Perangkat Daerah di Lampung Timur.
       </p>
 
+      {/* Tabel Informasi Dataset */}
       <div className="bg-white border border-gray-300 p-5 rounded-md shadow-sm overflow-hidden mb-5">
         <table className="min-w-full divide-y divide-gray-200">
           <tbody>
@@ -112,10 +155,16 @@ export default function DetailDatasetView() {
         </table>
       </div>
 
-      <div className="bg-white border border-gray-300 p-5 rounded-md shadow-sm overflow-hidden">
-        <h4 className="text-h4">
-          Jumlah Data Sektoral & Api Interoperabilitas
-        </h4>
+      {/* Tabel Input Data Sektoral */}
+      <div className="bg-white border border-gray-300 p-5 rounded-md shadow-sm overflow-hidden mb-5">
+        <div className="flex justify-between items-center mb-5">
+          <h4 className="text-h4">
+            Jumlah Data Sektoral & Api Interoperabilitas
+          </h4>
+          <Button variant="outlined" color="secondary" size="small">
+            Download
+          </Button>
+        </div>
         <table className="min-w-full divide-y divide-gray-200">
           <thead>
             <tr className="bg-gray-100">
@@ -146,6 +195,19 @@ export default function DetailDatasetView() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Bar Chart Section */}
+      <div className="bg-white border border-gray-300 p-5 rounded-md shadow-sm overflow-hidden mb-5">
+        <h4 className="text-h4 mb-4">Grafik Jumlah Data per Tahun</h4>
+        <div className="w-full max-h-80">
+          <ReactApexChart
+            options={options}
+            series={series}
+            type="bar"
+            height={350}
+          />
+        </div>
       </div>
     </div>
   );
