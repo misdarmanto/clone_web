@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useHttp } from "../../hooks/http";
 import type { IDatasetDetail } from "../../types/dataset.interface";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/buttons/Button";
 import ReactApexChart from "react-apexcharts";
 
 export default function DetailDatasetView() {
+  const navigate = useNavigate();
   const { datasetId } = useParams();
   const [loading, setLoading] = useState(true);
   const { handleGetRequest } = useHttp();
@@ -46,7 +47,7 @@ export default function DetailDatasetView() {
       type: "bar",
       height: 350,
     },
-    colors: ["#2196F3"],
+    colors: ["#ff5252"],
 
     plotOptions: {
       bar: {
@@ -161,7 +162,17 @@ export default function DetailDatasetView() {
           <h4 className="text-h4">
             Jumlah Data Sektoral & Api Interoperabilitas
           </h4>
-          <Button variant="outlined" color="secondary" size="small">
+
+          <Button
+            variant="outlined"
+            color="secondary"
+            size="small"
+            onClick={() => {
+              datasetDetail?.download_url
+                ? navigate(datasetDetail.download_url)
+                : "";
+            }}
+          >
             Download
           </Button>
         </div>
@@ -189,7 +200,9 @@ export default function DetailDatasetView() {
                 <td className="px-6 py-3 text-gray-900">{item.jumlah}</td>
                 <td className="px-6 py-3 text-gray-900">GET</td>
                 <td className="px-6 py-3 text-gray-900">
-                  <Button size="small">Open API</Button>
+                  <Button size="small" onClick={() => navigate("api-docs")}>
+                    Open API
+                  </Button>
                 </td>
               </tr>
             ))}
