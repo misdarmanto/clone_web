@@ -9,11 +9,10 @@ import { convertTime } from "../../utils/convertTime";
 export default function ListPublicationView() {
   const { handleGetRequest } = useHttp();
   const [publicationList, setPublicationList] = useState<IPublication[]>();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const handleGetPublication = async () => {
     try {
-      setLoading(true);
       const result = (await handleGetRequest({
         path: "/buku-digital",
       })) as IPublication[];

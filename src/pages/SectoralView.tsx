@@ -48,7 +48,6 @@ export default function SectoralView() {
 
   const fetchDropdownOptions = useCallback(async () => {
     try {
-      setLoading(true);
       const response = (await handleGetRequest({
         path: "/list-opd",
       })) as IOpd[];

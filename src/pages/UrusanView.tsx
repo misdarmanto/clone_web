@@ -48,7 +48,6 @@ export default function UrusanView() {
 
   const fetchDropdownOptions = useCallback(async () => {
     try {
-      setLoading(true);
       const response = (await handleGetRequest({
         path: "/list-opd/urusan",
       })) as IOpdUrusan[];
