@@ -38,7 +38,7 @@ export default function DetailDatasetView() {
   const series = [
     {
       name: "Jumlah",
-      data: datasetDetail?.input.map((item) => item.jumlah) || [],
+      data: datasetDetail?.input?.map((item) => item.jumlah) || [],
     },
   ];
 
@@ -59,7 +59,7 @@ export default function DetailDatasetView() {
       enabled: false,
     },
     xaxis: {
-      categories: datasetDetail?.input.map((item) => item.tahun) || [],
+      categories: datasetDetail?.input?.map((item) => item.tahun) || [],
     },
     yaxis: {
       title: {
@@ -194,18 +194,19 @@ export default function DetailDatasetView() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {datasetDetail?.input.map((item, i) => (
-              <tr className="even:bg-gray-50" key={`${i}-${item.kode_dssd}`}>
-                <td className="px-6 py-3 text-gray-900">{item.tahun}</td>
-                <td className="px-6 py-3 text-gray-900">{item.jumlah}</td>
-                <td className="px-6 py-3 text-gray-900">GET</td>
-                <td className="px-6 py-3 text-gray-900">
-                  <Button size="small" onClick={() => navigate("api-docs")}>
-                    Open API
-                  </Button>
-                </td>
-              </tr>
-            ))}
+            {Array.isArray(datasetDetail?.input) &&
+              datasetDetail?.input.map((item, i) => (
+                <tr className="even:bg-gray-50" key={`${i}-${item.kode_dssd}`}>
+                  <td className="px-6 py-3 text-gray-900">{item.tahun}</td>
+                  <td className="px-6 py-3 text-gray-900">{item.jumlah}</td>
+                  <td className="px-6 py-3 text-gray-900">GET</td>
+                  <td className="px-6 py-3 text-gray-900">
+                    <Button size="small" onClick={() => navigate("api-docs")}>
+                      Open API
+                    </Button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
