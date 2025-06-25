@@ -9,6 +9,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { IOpd } from "../../types/opd.interface";
 import type { IDataset } from "../../types/dataset.interface";
 import { convertTime } from "../../utils/convertTime";
+import Loading from "../../components/loading/Loading";
 
 const dataSetProdusen = [
   { title: "Sarana & Infrastruktur", total: 0 },
@@ -76,7 +77,7 @@ export default function ListDataSetView() {
     fetchDataset();
   }, [userOpdSelected]);
 
-  if (loading) return <div>...loading</div>;
+  if (loading) return <Loading />;
 
   return (
     <div className="min-h-screen">

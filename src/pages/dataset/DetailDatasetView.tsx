@@ -4,6 +4,7 @@ import type { IDatasetDetail } from "../../types/dataset.interface";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/buttons/Button";
 import ReactApexChart from "react-apexcharts";
+import Loading from "../../components/loading/Loading";
 
 export default function DetailDatasetView() {
   const navigate = useNavigate();
@@ -74,6 +75,8 @@ export default function DetailDatasetView() {
       },
     },
   };
+
+  if (loading) return <Loading />;
 
   return (
     <div>
