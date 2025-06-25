@@ -204,7 +204,11 @@ export default function DetailDatasetView() {
                   <td className="px-6 py-3 text-gray-900">{item.jumlah}</td>
                   <td className="px-6 py-3 text-gray-900">GET</td>
                   <td className="px-6 py-3 text-gray-900">
-                    <Button size="small" onClick={() => navigate("api-docs")}>
+                    <Button
+                      size="small"
+                      color="info"
+                      onClick={() => navigate("api-docs")}
+                    >
                       Open API
                     </Button>
                   </td>

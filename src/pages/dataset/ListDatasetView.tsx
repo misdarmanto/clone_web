@@ -95,11 +95,15 @@ export default function ListDataSetView() {
             <p className="text-h4 mb-2">Produsen Dataset</p>
 
             <InputField placeholder="Cari Produsen" fullWidth />
-            <div className="h-96 overflow-y-scroll">
+            <div className="h-96 overflow-y-scroll pt-2">
               {opdList.map((item, i) => (
                 <button
                   key={`${i}-${item.id_opd}`}
-                  className="w-full text-left px-3 py-2 border border-gray-200 rounded hover:bg-gray-200 text-sm"
+                  className={`w-full text-left px-3 py-2 border border-gray-200 rounded hover:bg-gray-200 text-sm ${
+                    userOpdSelected === item.id_opd
+                      ? "border-l-2 border-l-blue-500 bg-blue-100"
+                      : "border-l-transparent"
+                  }`}
                   onClick={() => handleSelectUserOpd(item.id_opd)}
                 >
                   {item.nama_opd}
