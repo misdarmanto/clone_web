@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useHttp } from "../../hooks/http";
 import type { IPublication } from "../../types/publication.interface";
 import { appConfigs } from "../../configs/appConfigs";
+import Loading from "../../components/loading/Loading";
 
 export default function DetailPublicationView() {
   const { publicationSlug } = useParams();
@@ -31,8 +32,8 @@ export default function DetailPublicationView() {
     handleGetDetailPublication();
   }, [publicationSlug]);
 
-  if (loading) return <div>Loading...</div>;
   if (!publicationDetail) return <div>Data tidak ditemukan</div>;
+  if (loading) return <Loading />;
 
   return (
     <div>

@@ -1,0 +1,79 @@
+{
+  "openapi": "3.0.0",
+ 
+  "servers": [
+    {"url": "https://api-satudata.lampungtimurkab.go.id"},
+    {
+      "url": "https://api.example.com/v1" 
+    }
+  ],
+  "paths": {
+    "/dataset": {
+      "get": {
+        "summary": "Daftar semua dataset",
+        "responses": {
+          "200": {
+            "description": "Berhasil mengambil daftar dataset",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "title": { "type": "string" },
+                      "description": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataset/detail/{id}": {
+      "get": {
+        "summary": "Detail sebuah dataset",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Berhasil mengambil detail dataset",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "title": { "type": "string" },
+                    "description": { "type": "string" },
+                    "input": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "tahun": { "type": "string" },
+                          "jumlah": { "type": "integer" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -5,10 +5,11 @@ import { CalendarDays, Clock, Building2 } from "lucide-react";
 import folderIcon from "../../assets/folder.webp";
 import { useNavigate } from "react-router-dom";
 import { useHttp } from "../../hooks/http";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { IOpd } from "../../types/opd.interface";
 import type { IDataset } from "../../types/dataset.interface";
 import { convertTime } from "../../utils/convertTime";
+import Loading from "../../components/loading/Loading";
 
 const dataSetProdusen = [
   { title: "Sarana & Infrastruktur", total: 0 },
@@ -24,6 +25,7 @@ export default function ListDataSetView() {
   const [opdList, setOpdList] = useState<IOpd[]>([]);
   const [datasetList, setDatasetList] = useState<IDataset[]>([]);
   const [userOpdSelected, setUserOpdSelected] = useState<number>(0);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
@@ -67,6 +69,15 @@ export default function ListDataSetView() {
     setUserOpdSelected(userOpdId);
   };
 
+  const filteredOpdList = useMemo(() => {
+    if (!searchQuery.trim()) return opdList;
+
+    const query = searchQuery.toLowerCase();
+    return opdList.filter((item) =>
+      item.nama_opd.toLowerCase().includes(query)
+    );
+  }, [opdList, searchQuery]);
+
   useEffect(() => {
     fetchDropdownOptions();
     fetchDataset();
@@ -76,7 +87,7 @@ export default function ListDataSetView() {
     fetchDataset();
   }, [userOpdSelected]);
 
-  if (loading) return <div>...loading</div>;
+  if (loading) return <Loading />;
 
   return (
     <div className="min-h-screen">
@@ -93,17 +104,32 @@ export default function ListDataSetView() {
           <div className="h-[500px] p-5 mb-5 border rounded border-gray-300">
             <p className="text-h4 mb-2">Produsen Dataset</p>
 
-            <InputField placeholder="Cari Produsen" fullWidth />
-            <div className="h-96 overflow-y-scroll">
-              {opdList.map((item, i) => (
-                <button
-                  key={`${i}-${item.id_opd}`}
-                  className="w-full text-left px-3 py-2 border border-gray-200 rounded hover:bg-gray-200 text-sm"
-                  onClick={() => handleSelectUserOpd(item.id_opd)}
-                >
-                  {item.nama_opd}
-                </button>
-              ))}
+            <InputField
+              placeholder="Cari Produsen"
+              fullWidth
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <div className="h-96 overflow-y-scroll pt-2">
+              {filteredOpdList.length > 0 ? (
+                filteredOpdList.map((item, i) => (
+                  <button
+                    key={`${i}-${item.id_opd}`}
+                    className={`w-full text-left px-3 py-2 border border-gray-200 rounded hover:bg-gray-200 text-sm ${
+                      userOpdSelected === item.id_opd
+                        ? "border-l-2 border-l-blue-500 bg-blue-100"
+                        : "border-l-transparent"
+                    }`}
+                    onClick={() => handleSelectUserOpd(item.id_opd)}
+                  >
+                    {item.nama_opd}
+                  </button>
+                ))
+              ) : (
+                <p className="text-center text-gray-500 p-2">
+                  Tidak ada data ditemukan
+                </p>
+              )}
             </div>
           </div>
           <div className="p-5 border rounded border-gray-300">

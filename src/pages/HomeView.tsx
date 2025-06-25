@@ -6,6 +6,7 @@ import { WavesIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useHttp } from "../hooks/http";
+import Loading from "../components/loading/Loading";
 
 interface ITotalData {
   data_sektoral: number;
@@ -47,7 +48,7 @@ export default function HomeView() {
     fetchTotalData();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loading />;
 
   return (
     <div>

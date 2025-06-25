@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import organizationImage from "../assets/oragnization.webp";
 import { useHttp } from "../hooks/http";
 import type { IOrganization } from "../types/organization.interface";
+import Loading from "../components/loading/Loading";
 
 const categories = [
   "Semua",
@@ -18,12 +19,11 @@ const categories = [
 export default function OrganizationView() {
   const [activeCategory, setActiveCategory] = useState("Semua");
   const { handleGetRequest } = useHttp();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [organizationList, setOrganizationList] = useState<IOrganization[]>([]);
 
   const fetchOrganizationList = async () => {
     try {
-      setLoading(true);
       const response = (await handleGetRequest({
         path: "/list-opd",
       })) as IOrganization[];
@@ -42,7 +42,7 @@ export default function OrganizationView() {
     fetchOrganizationList();
   }, []);
 
-  if (loading) return <div>...loading</div>;
+  if (loading) return <Loading />;
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">

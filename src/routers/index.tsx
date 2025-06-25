@@ -11,6 +11,7 @@ import ListPublicationView from "../pages/publication/ListPublicationView";
 import DetailPublicationView from "../pages/publication/DetailPublicationView";
 import ListDataSetView from "../pages/dataset/ListDatasetView";
 import DetailDatasetView from "../pages/dataset/DetailDatasetView";
+import DatasetSwaggerView from "../pages/dataset/DatasetSwaggerView";
 
 export default function AppRouters() {
   const routers = createBrowserRouter([
@@ -30,6 +31,10 @@ export default function AppRouters() {
         {
           path: "/datasets/detail/:datasetId",
           element: <DetailDatasetView />,
+        },
+        {
+          path: "/datasets/detail/:datasetId/api-docs",
+          element: <DatasetSwaggerView />,
         },
         {
           path: "/sectorals",
