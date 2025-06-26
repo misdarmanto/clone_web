@@ -7,21 +7,13 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useHttp } from "../hooks/http";
 import Loading from "../components/loading/Loading";
-
-interface ITotalData {
-  data_sektoral: number;
-  dataset: number;
-  urusan: number;
-}
-
-interface ITotalResponse {
-  total: ITotalData;
-}
+import type { ITotalData, ITotalResponse } from "../types/home.interface";
 
 export default function HomeView() {
   const navigation = useNavigate();
-  const [loading, setLoading] = useState(true);
   const { handleGetRequest } = useHttp();
+
+  const [loading, setLoading] = useState(true);
   const [totalData, setTotalData] = useState<ITotalData>({
     data_sektoral: 0,
     dataset: 0,

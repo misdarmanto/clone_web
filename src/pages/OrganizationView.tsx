@@ -17,8 +17,9 @@ const categories = [
 ];
 
 export default function OrganizationView() {
-  const [activeCategory, setActiveCategory] = useState("Semua");
   const { handleGetRequest } = useHttp();
+
+  const [activeCategory, setActiveCategory] = useState("Semua");
   const [loading, setLoading] = useState(true);
   const [organizationList, setOrganizationList] = useState<IOrganization[]>([]);
 
