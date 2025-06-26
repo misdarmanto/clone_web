@@ -36,7 +36,7 @@ export default function SectoralView() {
   const [dropdownOptions, setDropdownOptions] = useState<
     DropdownSearchOption[]
   >([]);
-  const [dropdownSelected, setDropdownSelected] = useState<number>(1);
+  const [dropdownSelected, setDropdownSelected] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState<ITableData[]>([]);
   const [filterByFirstYear, setFilterByFirstYear] = useState<number | null>(
