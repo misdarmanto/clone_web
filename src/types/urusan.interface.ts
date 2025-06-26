@@ -19,3 +19,13 @@ export interface IUrusan {
   active: boolean;
   input: IInput[];
 }
+
+export interface IUrusanTable {
+  no: number;
+  kodeDssd: string;
+  uraiDssd: string;
+  satuan: string;
+  "2022": number;
+  "2023": number;
+  "2024": number;
+}

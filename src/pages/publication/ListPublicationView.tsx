@@ -8,6 +8,7 @@ import { convertTime } from "../../utils/convertTime";
 
 export default function ListPublicationView() {
   const { handleGetRequest } = useHttp();
+
   const [publicationList, setPublicationList] = useState<IPublication[]>();
   const [loading, setLoading] = useState(true);
 
@@ -16,7 +17,10 @@ export default function ListPublicationView() {
       const result = (await handleGetRequest({
         path: "/buku-digital",
       })) as IPublication[];
-      setPublicationList(result);
+
+      if (result && Array.isArray(result)) {
+        setPublicationList(result);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -61,7 +65,6 @@ export default function ListPublicationView() {
   return (
     <div>
       <h2 className="text-h2 text-orange-300 mb-4">Data Publikasi</h2>
-
       <div className="p-5 border border-gray-300 border-1 rounded-md">
         <Table
           data={publicationList ?? []}

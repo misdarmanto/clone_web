@@ -21,14 +21,16 @@ const dataSetProdusen = [
 export default function ListDataSetView() {
   const navigation = useNavigate();
   const { handleGetRequest, handleGetPaginatedData } = useHttp();
+
   const [loading, setLoading] = useState(true);
   const [opdList, setOpdList] = useState<IOpd[]>([]);
   const [datasetList, setDatasetList] = useState<IDataset[]>([]);
   const [userOpdSelected, setUserOpdSelected] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const [page, setPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
 
   const fetchDropdownOptions = useCallback(async () => {
     try {
@@ -46,11 +48,11 @@ export default function ListDataSetView() {
     }
   }, [handleGetRequest]);
 
-  const fetchDataset = useCallback(async () => {
+  const fetchDataset = async () => {
     try {
       const response = await handleGetPaginatedData({
         path: "/dataset",
-        size: 10,
+        page: currentPage,
         filter: {
           id_user_opd: userOpdSelected,
         },
@@ -59,14 +61,18 @@ export default function ListDataSetView() {
       if (response && Array.isArray(response?.items)) {
         setDatasetList(response.items);
         setTotalPage(response.totalPage);
+        setTotalItems(response.totalItem);
       }
     } catch (err) {
       console.error("Dropdown fetch error:", err);
     }
-  }, [handleGetRequest, userOpdSelected]);
+  };
 
   const handleSelectUserOpd = (userOpdId: number) => {
     setUserOpdSelected(userOpdId);
+    setCurrentPage(1);
+    setTotalItems(0);
+    setTotalPage(0);
   };
 
   const filteredOpdList = useMemo(() => {
@@ -85,7 +91,7 @@ export default function ListDataSetView() {
 
   useEffect(() => {
     fetchDataset();
-  }, [userOpdSelected]);
+  }, [userOpdSelected, currentPage]);
 
   if (loading) return <Loading />;
 
@@ -142,7 +148,7 @@ export default function ListDataSetView() {
                 >
                   {item.title}
                 </button>
-                <div className="bg-blue-500 w-5 h-5 rounded-full flex items-center justify-center">
+                <div className="bg-blue-500 w-5 h-5 rounded-md flex items-center justify-center">
                   <span className="text-sm text-white text-center">
                     {item.total}
                   </span>
@@ -164,7 +170,7 @@ export default function ListDataSetView() {
             />
             <div className="flex items-center justify-between gap-4 mb-2 flex-wrap">
               <p className="text-sm text-gray-500">
-                {datasetList.length || 0} Dataset Ditemukan
+                {totalItems || 0} Dataset Ditemukan
               </p>
 
               <div className="flex items-center justify-between">
@@ -236,10 +242,10 @@ export default function ListDataSetView() {
 
             {/* Pagination */}
             <Pagination
-              currentPage={page}
+              currentPage={currentPage}
               totalPages={totalPage}
-              onPrev={() => setPage((prev) => Math.max(prev - 1, 1))}
-              onNext={() => setPage((prev) => prev + 1)}
+              onPrev={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              onNext={() => setCurrentPage((prev) => prev + 1)}
             />
           </div>
         </div>

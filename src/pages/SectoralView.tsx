@@ -8,19 +8,9 @@ import DropdownSearch, {
 import { useHttp } from "../hooks/http";
 import type { IOpd } from "../types/opd.interface";
 import Pagination from "../components/pagination/Pagination";
-import type { ISectoral } from "../types/sectoral.interface";
+import type { ISectoral, ISectoralTable } from "../types/sectoral.interface";
 
-interface ITableData {
-  no: number;
-  kodeDssd: string;
-  uraiDssd: string;
-  satuan: string;
-  "2022": number;
-  "2023": number;
-  "2024": number;
-}
-
-const TABLE_COLUMNS: TableColumn<ITableData>[] = [
+const TABLE_COLUMNS: TableColumn<ISectoralTable>[] = [
   { key: "no", title: "No" },
   { key: "kodeDssd", title: "Kode DSSD" },
   { key: "uraiDssd", title: "Uraian DSSD" },
@@ -36,9 +26,9 @@ export default function SectoralView() {
   const [dropdownOptions, setDropdownOptions] = useState<
     DropdownSearchOption[]
   >([]);
-  const [dropdownSelected, setDropdownSelected] = useState<number>(1);
+  const [dropdownSelected, setDropdownSelected] = useState<number>(0);
   const [loading, setLoading] = useState(true);
-  const [tableData, setTableData] = useState<ITableData[]>([]);
+  const [tableData, setTableData] = useState<ISectoralTable[]>([]);
   const [filterByFirstYear, setFilterByFirstYear] = useState<number | null>(
     null
   );
@@ -57,6 +47,7 @@ export default function SectoralView() {
           label: item.nama_opd,
           value: item.id_opd,
         }));
+
         setDropdownOptions(options);
       }
     } catch (err) {
@@ -78,7 +69,7 @@ export default function SectoralView() {
         },
       });
 
-      if (response) {
+      if (response && Array.isArray(response.items)) {
         const items = response.items as ISectoral[];
         const mappedData = items.map((item, index) => ({
           no: index + 1,

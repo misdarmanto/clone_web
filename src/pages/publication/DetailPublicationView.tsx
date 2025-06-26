@@ -4,21 +4,22 @@ import { useHttp } from "../../hooks/http";
 import type { IPublication } from "../../types/publication.interface";
 import { appConfigs } from "../../configs/appConfigs";
 import Loading from "../../components/loading/Loading";
+import { formatTextToUrlPath } from "../../utils/format";
 
 export default function DetailPublicationView() {
   const { publicationSlug } = useParams();
   const { handleGetRequest } = useHttp();
+
   const [publicationDetail, setPublicationDetail] = useState<IPublication>();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const handleGetDetailPublication = async () => {
     try {
-      setLoading(true);
       const result = (await handleGetRequest({
         path: `/buku-digital/detail/${publicationSlug}`,
       })) as IPublication[];
 
-      if (result?.length > 0) {
+      if (Array.isArray(result) && result?.length > 0) {
         setPublicationDetail(result[0]);
       }
     } catch (error) {
@@ -33,12 +34,12 @@ export default function DetailPublicationView() {
   }, [publicationSlug]);
 
   if (!publicationDetail) return <div>Data tidak ditemukan</div>;
+
   if (loading) return <Loading />;
 
   return (
     <div>
       <h2 className="mb-2">{publicationDetail.buku}</h2>
-
       {publicationDetail.file ? (
         <div>
           <div className="border border-gray-300 rounded-md p-5">
@@ -56,17 +57,4 @@ export default function DetailPublicationView() {
       )}
     </div>
   );
-}
-
-function formatTextToUrlPath(path: string): string {
-  let cleanedPath = path.replace("handler/http/", "");
-  cleanedPath = cleanedPath.replace(/\\/g, "/");
-  cleanedPath = cleanedPath.replace(/\/\/+/g, "/");
-
-  const encodedPath = cleanedPath
-    .split("/")
-    .map((part) => encodeURIComponent(part))
-    .join("/");
-
-  return encodedPath;
 }

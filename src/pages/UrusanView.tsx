@@ -8,19 +8,9 @@ import DropdownSearch, {
 import { useHttp } from "../hooks/http";
 import type { IOpdUrusan } from "../types/opd.interface";
 import Pagination from "../components/pagination/Pagination";
-import type { IUrusan } from "../types/urusan.interface";
+import type { IUrusan, IUrusanTable } from "../types/urusan.interface";
 
-interface ITableData {
-  no: number;
-  kodeDssd: string;
-  uraiDssd: string;
-  satuan: string;
-  "2022": number;
-  "2023": number;
-  "2024": number;
-}
-
-const TABLE_COLUMNS: TableColumn<ITableData>[] = [
+const TABLE_COLUMNS: TableColumn<IUrusanTable>[] = [
   { key: "no", title: "No" },
   { key: "kodeDssd", title: "Kode DSSD" },
   { key: "uraiDssd", title: "Uraian DSSD" },
@@ -38,7 +28,7 @@ export default function UrusanView() {
   >([]);
   const [dropdownSelected, setDropdownSelected] = useState<number>(1);
   const [loading, setLoading] = useState(false);
-  const [tableData, setTableData] = useState<ITableData[]>([]);
+  const [tableData, setTableData] = useState<IUrusanTable[]>([]);
   const [filterByFirstYear, setFilterByFirstYear] = useState<number | null>(
     null
   );
@@ -78,7 +68,7 @@ export default function UrusanView() {
         },
       });
 
-      if (response) {
+      if (response && Array.isArray(response.items)) {
         const items = response.items as IUrusan[];
         const mappedData = items.map((item, index) => ({
           no: index + 1,

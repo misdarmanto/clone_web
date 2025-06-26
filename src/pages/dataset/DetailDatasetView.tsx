@@ -9,8 +9,9 @@ import Loading from "../../components/loading/Loading";
 export default function DetailDatasetView() {
   const navigate = useNavigate();
   const { datasetId } = useParams();
-  const [loading, setLoading] = useState(true);
   const { handleGetRequest } = useHttp();
+
+  const [loading, setLoading] = useState(true);
   const [datasetDetail, setDatasetDetail] = useState<IDatasetDetail>();
 
   const fetchDatasetDetail = async () => {
@@ -33,9 +34,6 @@ export default function DetailDatasetView() {
     fetchDatasetDetail();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-
-  // Prepare chart data
   const series = [
     {
       name: "Jumlah",
