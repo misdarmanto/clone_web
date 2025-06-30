@@ -1,14 +1,10 @@
-APP_NAME = satu_data_app
-BUILD_DIR = dist
-SERVER_USER = root
-SERVER_IP = 192.168.1.100
-SERVER_PATH = /var/www/satu_data
-SSH_KEY = ~/.ssh/id_rsa
+include .env
+export
 
 NPM = npm
 VITE = npx vite
-SCP = scp -i $(SSH_KEY)
-SSH = ssh -i $(SSH_KEY) $(SERVER_USER)@$(SERVER_IP)
+SCP = scp -i $(VITE_SSH_KEY)
+SSH = ssh -i $(VITE_SSH_KEY) $(VITE_SERVER_USER)@$(VITE_SERVER_IP)
 
 .PHONY: help
 help:
@@ -28,17 +24,17 @@ dev:
 
 .PHONY: build
 build:
-	rm -rf $(BUILD_DIR) || true
+	rm -rf $(VITE_BUILD_DIR) || true
 	$(VITE) build
 
 .PHONY: deploy
 deploy: build
-	$(SCP) -r $(BUILD_DIR)/* $(SERVER_USER)@$(SERVER_IP):$(SERVER_PATH)
-	$(SSH) "cd $(SERVER_PATH) && ls -la"
+	$(SCP) -r $(VITE_BUILD_DIR)/* $(VITE_SERVER_USER)@$(VITE_SERVER_IP):$(VITE_SERVER_PATH)
+	$(SSH) "cd $(VITE_SERVER_PATH) && ls -la"
 
 .PHONY: start
 start:
-	$(SSH) "cd $(SERVER_PATH) && pm2 serve $(SERVER_PATH) 3000 --spa --no-daemon"
+	$(SSH) "cd $(VITE_SERVER_PATH) && pm2 serve $(VITE_SERVER_PATH) 3006 --spa --no-daemon"
 
 .PHONY: stop
 stop:
