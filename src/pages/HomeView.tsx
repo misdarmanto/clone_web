@@ -60,7 +60,7 @@ export default function HomeView() {
             Mari temukan apa yang akan anda cari.
           </p>
           <div className="flex space-x-4">
-            <Button>CARI DATA</Button>
+            <Button onClick={() => navigation("/datasets")}>CARI DATA</Button>
             <Button variant="outlined" onClick={() => navigation("/datasets")}>
               LIHAT DATASET
             </Button>

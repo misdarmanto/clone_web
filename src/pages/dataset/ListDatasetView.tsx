@@ -116,12 +116,12 @@ export default function ListDataSetView() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <div className="h-96 overflow-y-scroll pt-2">
+            <div className="h-96 overflow-y-scroll pt-2 no-scrollbar">
               {filteredOpdList.length > 0 ? (
                 filteredOpdList.map((item, i) => (
                   <button
                     key={`${i}-${item.id_opd}`}
-                    className={`w-full text-left px-3 py-2 border border-gray-200 rounded hover:bg-gray-200 text-sm ${
+                    className={`w-full text-left px-3 py-2 my-2 border-gray-300 rounded hover:bg-gray-200 text-sm ${
                       userOpdSelected === item.id_opd
                         ? "border-l-2 border-l-blue-500 bg-blue-100"
                         : "border-l-transparent"
@@ -144,7 +144,7 @@ export default function ListDataSetView() {
               <div className="flex justify-between items-center">
                 <button
                   key={`${i}-${item}`}
-                  className="w-full text-left text-blue-500 py-2 border border-gray-200 rounded hover:bg-gray-100 text-sm"
+                  className="w-full text-left text-blue-500 py-2 border border-gray-00 rounded hover:bg-gray-100 text-sm"
                 >
                   {item.title}
                 </button>
