@@ -9,6 +9,7 @@ import { useHttp } from "../hooks/http";
 import type { IOpdUrusan } from "../types/opd.interface";
 import Pagination from "../components/pagination/Pagination";
 import type { IUrusan, IUrusanTable } from "../types/urusan.interface";
+import { useSearchParams } from "react-router-dom";
 
 const TABLE_COLUMNS: TableColumn<IUrusanTable>[] = [
   { key: "no", title: "No" },
@@ -22,6 +23,7 @@ const TABLE_COLUMNS: TableColumn<IUrusanTable>[] = [
 
 export default function UrusanView() {
   const { handleGetRequest, handleGetPaginatedData } = useHttp();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [dropdownOptions, setDropdownOptions] = useState<
     DropdownSearchOption[]
@@ -56,15 +58,23 @@ export default function UrusanView() {
     }
   }, [handleGetRequest]);
 
-  const fetchTableData = async () => {
+  const fetchTableData = async ({
+    kodeUrusan,
+    startYear,
+    endYear,
+  }: {
+    kodeUrusan: number;
+    startYear: number;
+    endYear: number;
+  }) => {
     try {
       const response = await handleGetPaginatedData({
         path: "/data-sektoral/list-by-urusan",
         page: currentPage,
         filter: {
-          kode_urusan: dropdownSelected,
-          dari_tahun: filterByEndYear,
-          sampai_tahun: filterByEndYear,
+          kode_urusan: kodeUrusan,
+          dari_tahun: startYear,
+          sampai_tahun: endYear,
         },
       });
 
@@ -90,12 +100,54 @@ export default function UrusanView() {
     }
   };
 
+  const handleFilter = () => {
+    const newParams: Record<string, string> = {};
+
+    if (dropdownSelected !== 0) {
+      newParams.kode_urusan = dropdownSelected.toString();
+    }
+
+    if (filterByFirstYear !== null && filterByFirstYear > 0) {
+      newParams.dari_tahun = filterByFirstYear.toString();
+    }
+
+    if (filterByEndYear !== null && filterByEndYear > 0) {
+      newParams.sampai_tahun = filterByEndYear.toString();
+    }
+
+    setSearchParams(newParams);
+
+    fetchTableData({
+      kodeUrusan: dropdownSelected,
+      startYear: filterByFirstYear || 2000,
+      endYear: filterByEndYear || 2025,
+    });
+  };
+
   useEffect(() => {
     fetchDropdownOptions();
+
+    const kodeUrusan = parseInt(searchParams.get("kode_urusan") || "0");
+    const dariTahun = parseInt(searchParams.get("dari_tahun") || "0");
+    const sampaiTahun = parseInt(searchParams.get("sampai_tahun") || "0");
+
+    if (kodeUrusan > 0) setDropdownSelected(kodeUrusan);
+    if (dariTahun > 0) setFilterByFirstYear(dariTahun);
+    if (sampaiTahun > 0) setFilterByEndYear(sampaiTahun);
+
+    fetchTableData({
+      kodeUrusan: kodeUrusan || dropdownSelected,
+      startYear: dariTahun || filterByFirstYear || 2000,
+      endYear: sampaiTahun || filterByEndYear || 2025,
+    });
   }, []);
 
   useEffect(() => {
-    fetchTableData();
+    fetchTableData({
+      kodeUrusan: dropdownSelected,
+      startYear: filterByFirstYear || 2000,
+      endYear: filterByEndYear || 2025,
+    });
   }, [currentPage]);
 
   return (
@@ -131,7 +183,7 @@ export default function UrusanView() {
           />
 
           <div className="flex items-end justify-center">
-            <Button onClick={fetchTableData}>Tampilkan</Button>
+            <Button onClick={handleFilter}>Tampilkan</Button>
           </div>
         </div>
       </div>
