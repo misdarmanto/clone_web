@@ -3,6 +3,7 @@ import organizationImage from "../assets/oragnization.webp";
 import { useHttp } from "../hooks/http";
 import type { IOrganization } from "../types/organization.interface";
 import Loading from "../components/loading/Loading";
+import { useNavigate } from "react-router-dom";
 
 const categories = [
   "Semua",
@@ -18,6 +19,7 @@ const categories = [
 
 export default function OrganizationView() {
   const { handleGetRequest } = useHttp();
+  const navigation = useNavigate();
 
   const [activeCategory, setActiveCategory] = useState("Semua");
   const [loading, setLoading] = useState(true);
@@ -69,7 +71,8 @@ export default function OrganizationView() {
         {organizationList.map((org, index) => (
           <div
             key={index}
-            className="bg-white rounded shadow p-6 text-center hover:shadow-lg transition"
+            className="bg-white rounded shadow p-6 text-center hover:shadow-lg transition cursor-pointer"
+            onClick={() => navigation(`/sectorals?id_user_opd=${org.id_opd}`)}
           >
             <img
               src={organizationImage}

@@ -9,6 +9,7 @@ import { useHttp } from "../hooks/http";
 import type { IOpd } from "../types/opd.interface";
 import Pagination from "../components/pagination/Pagination";
 import type { ISectoral, ISectoralTable } from "../types/sectoral.interface";
+import { useSearchParams } from "react-router-dom";
 
 const TABLE_COLUMNS: TableColumn<ISectoralTable>[] = [
   { key: "no", title: "No" },
@@ -22,6 +23,7 @@ const TABLE_COLUMNS: TableColumn<ISectoralTable>[] = [
 
 export default function SectoralView() {
   const { handleGetRequest, handleGetPaginatedData } = useHttp();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [dropdownOptions, setDropdownOptions] = useState<
     DropdownSearchOption[]
@@ -57,22 +59,31 @@ export default function SectoralView() {
     }
   }, [handleGetRequest]);
 
-  const fetchTableData = async () => {
+  const fetchTableData = async ({
+    userIdOpd,
+    startYear,
+    endYear,
+  }: {
+    userIdOpd: number;
+    startYear: number;
+    endYear: number;
+  }) => {
+    setLoading(true);
     try {
       const response = await handleGetPaginatedData({
         path: "/data-sektoral/list-by-opd",
         page: currentPage,
         filter: {
-          id_user_opd: dropdownSelected,
-          dari_tahun: filterByEndYear,
-          sampai_tahun: filterByEndYear,
+          id_user_opd: userIdOpd,
+          dari_tahun: startYear,
+          sampai_tahun: endYear,
         },
       });
 
       if (response && Array.isArray(response.items)) {
         const items = response.items as ISectoral[];
         const mappedData = items.map((item, index) => ({
-          no: index + 1,
+          no: index + 1 + (currentPage - 1) * 10,
           kodeDssd: item.kode_dssd,
           uraiDssd: item.uraian_dssd,
           satuan: item.satuan,
@@ -91,12 +102,54 @@ export default function SectoralView() {
     }
   };
 
+  const handleFilter = () => {
+    const newParams: Record<string, string> = {};
+
+    if (dropdownSelected !== 0) {
+      newParams.id_user_opd = dropdownSelected.toString();
+    }
+
+    if (filterByFirstYear !== null && filterByFirstYear > 0) {
+      newParams.dari_tahun = filterByFirstYear.toString();
+    }
+
+    if (filterByEndYear !== null && filterByEndYear > 0) {
+      newParams.sampai_tahun = filterByEndYear.toString();
+    }
+
+    setSearchParams(newParams);
+
+    fetchTableData({
+      userIdOpd: dropdownSelected,
+      startYear: filterByFirstYear || 2000,
+      endYear: filterByEndYear || 2025,
+    });
+  };
+
   useEffect(() => {
     fetchDropdownOptions();
+
+    const idUserOpd = parseInt(searchParams.get("id_user_opd") || "0");
+    const dariTahun = parseInt(searchParams.get("dari_tahun") || "0");
+    const sampaiTahun = parseInt(searchParams.get("sampai_tahun") || "0");
+
+    if (idUserOpd > 0) setDropdownSelected(idUserOpd);
+    if (dariTahun > 0) setFilterByFirstYear(dariTahun);
+    if (sampaiTahun > 0) setFilterByEndYear(sampaiTahun);
+
+    fetchTableData({
+      userIdOpd: idUserOpd || dropdownSelected,
+      startYear: dariTahun || filterByFirstYear || 2000,
+      endYear: sampaiTahun || filterByEndYear || 2025,
+    });
   }, []);
 
   useEffect(() => {
-    fetchTableData();
+    fetchTableData({
+      userIdOpd: dropdownSelected,
+      startYear: filterByFirstYear || 2000,
+      endYear: filterByEndYear || 2025,
+    });
   }, [currentPage]);
 
   return (
@@ -112,7 +165,7 @@ export default function SectoralView() {
               label="Perangkat Daerah"
               options={dropdownOptions}
               value={dropdownSelected}
-              onChange={setDropdownSelected}
+              onChange={(value) => setDropdownSelected(value)}
             />
           </div>
 
@@ -120,19 +173,25 @@ export default function SectoralView() {
             label="Dari Tahun"
             type="number"
             placeholder="Dari Tahun..."
-            value={filterByFirstYear?.toString()}
-            onChange={(e) => setFilterByFirstYear(Number(e.target.value))}
+            value={filterByFirstYear?.toString() ?? ""}
+            onChange={(e) =>
+              setFilterByFirstYear(
+                e.target.value ? Number(e.target.value) : null
+              )
+            }
           />
           <InputField
             label="Sampai Tahun"
             type="number"
             placeholder="Sampai Tahun..."
-            value={filterByEndYear?.toString()}
-            onChange={(e) => setFilterByEndYear(Number(e.target.value))}
+            value={filterByEndYear?.toString() ?? ""}
+            onChange={(e) =>
+              setFilterByEndYear(e.target.value ? Number(e.target.value) : null)
+            }
           />
 
           <div className="flex items-end justify-center">
-            <Button onClick={fetchTableData}>Tampilkan</Button>
+            <Button onClick={handleFilter}>Tampilkan</Button>
           </div>
         </div>
       </div>
