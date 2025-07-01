@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import emptyIcon from "../../assets/empty.webp";
 
 export interface TableColumn<T> {
   key: keyof T;
@@ -33,8 +34,9 @@ const Table = <T extends object>({
 
   if (!data.length) {
     return (
-      <div className="flex min-h-[200px] w-full border-collapse flex-col items-center justify-center p-5 text-center text-gray-600">
-        {emptyMessage}
+      <div className="text-center py-20">
+        <img src={emptyIcon} alt="Empty box" className="mx-auto mb-4 w-24" />
+        <p className="text-lg font-semibold text-gray-600">{emptyMessage}</p>
       </div>
     );
   }
