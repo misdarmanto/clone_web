@@ -23,7 +23,7 @@ export default function LoginView() {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="bg-white shadow-md rounded-md p-8 w-full max-w-md">
+      <div className="bg-white shadow-sm rounded-md p-8 w-full max-w-md">
         <h2 className="text-center text-h5 mb-2">Selamat Datang!</h2>
         <h1 className="text-center text-h2 mb-1">SISTEM SATU DATA</h1>
         <p className="text-center text-gray-600 mb-8">
