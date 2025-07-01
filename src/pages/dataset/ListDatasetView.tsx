@@ -144,7 +144,7 @@ export default function ListDataSetView() {
               <div className="flex justify-between items-center">
                 <button
                   key={`${i}-${item}`}
-                  className="w-full text-left text-blue-500 py-2 border border-gray-00 rounded hover:bg-gray-100 text-sm"
+                  className="w-full text-left text-blue-500 py-2 rounded hover:bg-gray-100 text-sm"
                 >
                   {item.title}
                 </button>

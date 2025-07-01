@@ -169,28 +169,36 @@ export default function SectoralView() {
             />
           </div>
 
-          <InputField
-            label="Dari Tahun"
-            type="number"
-            placeholder="Dari Tahun..."
-            value={filterByFirstYear?.toString() ?? ""}
-            onChange={(e) =>
-              setFilterByFirstYear(
-                e.target.value ? Number(e.target.value) : null
-              )
-            }
-          />
-          <InputField
-            label="Sampai Tahun"
-            type="number"
-            placeholder="Sampai Tahun..."
-            value={filterByEndYear?.toString() ?? ""}
-            onChange={(e) =>
-              setFilterByEndYear(e.target.value ? Number(e.target.value) : null)
-            }
-          />
+          <div className="col-span-2 sm:col-span-1">
+            <InputField
+              label="Dari Tahun"
+              type="number"
+              fullWidth
+              placeholder="Dari Tahun..."
+              value={filterByFirstYear?.toString() ?? ""}
+              onChange={(e) =>
+                setFilterByFirstYear(
+                  e.target.value ? Number(e.target.value) : null
+                )
+              }
+            />
+          </div>
+          <div className="col-span-2 sm:col-span-1">
+            <InputField
+              label="Sampai Tahun"
+              type="number"
+              fullWidth
+              placeholder="Sampai Tahun..."
+              value={filterByEndYear?.toString() ?? ""}
+              onChange={(e) =>
+                setFilterByEndYear(
+                  e.target.value ? Number(e.target.value) : null
+                )
+              }
+            />
+          </div>
 
-          <div className="flex items-end justify-center">
+          <div className="flex items-end">
             <Button onClick={handleFilter}>Tampilkan</Button>
           </div>
         </div>

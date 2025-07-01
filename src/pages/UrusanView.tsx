@@ -166,23 +166,28 @@ export default function UrusanView() {
               onChange={setDropdownSelected}
             />
           </div>
+          <div className="col-span-2 sm:col-span-1">
+            <InputField
+              label="Dari Tahun"
+              type="number"
+              fullWidth
+              placeholder="Dari Tahun..."
+              value={filterByFirstYear?.toString()}
+              onChange={(e) => setFilterByFirstYear(Number(e.target.value))}
+            />
+          </div>
+          <div className="col-span-2 sm:col-span-1">
+            <InputField
+              label="Sampai Tahun"
+              type="number"
+              fullWidth
+              placeholder="Sampai Tahun..."
+              value={filterByEndYear?.toString()}
+              onChange={(e) => setFilterByEndYear(Number(e.target.value))}
+            />
+          </div>
 
-          <InputField
-            label="Dari Tahun"
-            type="number"
-            placeholder="Dari Tahun..."
-            value={filterByFirstYear?.toString()}
-            onChange={(e) => setFilterByFirstYear(Number(e.target.value))}
-          />
-          <InputField
-            label="Sampai Tahun"
-            type="number"
-            placeholder="Sampai Tahun..."
-            value={filterByEndYear?.toString()}
-            onChange={(e) => setFilterByEndYear(Number(e.target.value))}
-          />
-
-          <div className="flex items-end justify-center">
+          <div className="flex items-end ">
             <Button onClick={handleFilter}>Tampilkan</Button>
           </div>
         </div>
