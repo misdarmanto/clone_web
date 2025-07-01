@@ -160,7 +160,7 @@ export default function UrusanView() {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div className="col-span-2">
             <DropdownSearch
-              label="Perangkat Daerah"
+              label="Urusan Bidang"
               options={dropdownOptions}
               value={dropdownSelected}
               onChange={setDropdownSelected}
